@@ -31,6 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 image: AssetImage('assets/images/gradientBg.png'),
                 fit: BoxFit.cover)),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -47,16 +48,17 @@ class _SplashScreenState extends State<SplashScreen> {
                     children: [
                       Image(image: AssetImage('assets/images/logo.png')),
                       SizedBox(width: 10),
-                      BlackText(
-                          text: 'TodoHive', size: 41, weight: FontWeight.w900)
+                      MyText(
+                          text: 'TodoHive', size: 41, weight: FontWeight.w900,color:Colors.black)
                     ],
                   ),
                   SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      BlackText(
+                      MyText(
                           size: 13,
+                          color:Colors.black,
                           text: 'Innovative, user-friendly,\n'
                               'and easy.')
                     ],
@@ -67,6 +69,12 @@ class _SplashScreenState extends State<SplashScreen> {
                   )
                 ],
               ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Image(image: AssetImage('assets/images/Vector2.png')),
+              ],
             ),
           ],
         ),
