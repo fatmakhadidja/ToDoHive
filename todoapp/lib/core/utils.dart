@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'constants.dart';
 
 class MyText extends StatelessWidget {
   final FontWeight? weight;
@@ -22,17 +23,23 @@ class MyText extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class TaskTypeContainer extends StatefulWidget {
   final Color color;
   final String imageIcon;
   final String taskType;
   final int taskNumber;
-  const TaskTypeContainer(
+  List<bool> pressedTasks;
+  final int index;
+
+  TaskTypeContainer(
       {super.key,
       required this.color,
       required this.imageIcon,
       required this.taskType,
-      required this.taskNumber});
+      required this.taskNumber,
+      required this.pressedTasks,
+      required this.index});
 
   @override
   State<TaskTypeContainer> createState() => _TaskTypeContainerState();
@@ -41,36 +48,61 @@ class TaskTypeContainer extends StatefulWidget {
 class _TaskTypeContainerState extends State<TaskTypeContainer> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.48, // 80% of screen width
-      height: MediaQuery.of(context).size.height * 0.18,
-      decoration: BoxDecoration(
-        color: widget.color,
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Image(image: AssetImage(widget.imageIcon)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                MyText(
-                    size: 15,
-                    text: widget.taskType,
-                    color: Colors.black,
-                    weight: FontWeight.bold),
-                MyText(
-                    size: 15,
-                    text: widget.taskNumber.toString(),
-                    color: Colors.black,
-                    weight: FontWeight.bold)
-              ],
-            )
-          ],
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          List<bool> newPressedTasks = List.from(widget.pressedTasks);
+          newPressedTasks.fillRange(0, newPressedTasks.length, false);
+          newPressedTasks[widget.index] = true;
+          widget.pressedTasks = newPressedTasks;
+        });
+      },
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 100),
+        width: MediaQuery.of(context).size.width * 0.48,
+        height: MediaQuery.of(context).size.height * 0.18,
+        decoration: BoxDecoration(
+          color: widget.color,
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+          boxShadow: widget.pressedTasks[widget.index]
+              ? [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.3),
+                    spreadRadius: 2,
+                    blurRadius: 10,
+                    offset: Offset(0, 4),
+                  ),
+                ]
+              : [],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Image(image: AssetImage(widget.imageIcon)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    widget.taskType,
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
+                  ),
+                  Text(
+                    widget.taskNumber.toString(),
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -78,7 +110,11 @@ class _TaskTypeContainerState extends State<TaskTypeContainer> {
 }
 
 class TaskContainer extends StatefulWidget {
-  const TaskContainer({super.key});
+  final String taskTitle;
+  final String taskDescription;
+
+  const TaskContainer(
+      {super.key, required this.taskTitle, required this.taskDescription});
 
   @override
   State<TaskContainer> createState() => _TaskContainerState();
@@ -88,69 +124,80 @@ class _TaskContainerState extends State<TaskContainer> {
   bool isChecked = false;
   @override
   Widget build(BuildContext context) {
-    return IntrinsicHeight(
-      child: Container(
-        width: MediaQuery.of(context).size.width * 0.95,
-        padding: EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          border: Border.all(color: Color(0xffD5D5D5), width: 1.5),
-          color: Colors.white,
-          // boxShadow: [
-          //   BoxShadow(
-          //     color: Color(0xffC1C1C1), // Shadow color
-          //     spreadRadius: 1, // How much the shadow spreads
-          //     blurRadius: 20, // Softness of the shadow
-          //     offset: Offset(0, 2), // Moves shadow right & down
-          //   ),
-          // ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Checkbox(
-                  value: isChecked,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      isChecked = value ?? false;
-                    });
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      MyText(
-                          color: Colors.black,
-                          size: 17,
-                          text: 'Task1',
-                          weight: FontWeight.bold),
-                      SizedBox(height: 5),
-                      MyText(
-                          color: Color(0xff757575),
-                          size: 11,
-                          text: 'Description',
-                          weight: FontWeight.w500),
-                    ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: IntrinsicHeight(
+        child: Container(
+          width: MediaQuery.of(context).size.width * 0.95,
+          padding: EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(
+                color: WidgetStateColor.resolveWith((states) {
+                  if (isChecked) {
+                    return MyColors.mainPurple;
+                  }
+                  return Color(0xff757575);
+                }),
+                width: 1.5),
+            color: Colors.white,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Checkbox(
+                    activeColor: MyColors.mainPurple,
+                    value: isChecked,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        isChecked = value ?? false;
+                      });
+                    },
                   ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.edit, color: Color(0xff757575)),
-                ),
-                IconButton(
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        MyText(
+                            color: Colors.black,
+                            size: 17,
+                            text: widget.taskTitle,
+                            weight: FontWeight.w900),
+                        SizedBox(height: 5),
+                        MyText(
+                            color: Color(0xff757575),
+                            size: 11,
+                            text: widget.taskDescription,
+                            weight: FontWeight.w500),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  IconButton(
                     onPressed: () {},
-                    icon: Icon(Icons.delete, color: Colors.red))
-              ],
-            ),
-          ],
+                    icon: Icon(
+                      Icons.edit,
+                      color: WidgetStateColor.resolveWith((states) {
+                        if (isChecked) {
+                          return MyColors.mainPurple;
+                        }
+                        return Color(0xff757575);
+                      }),
+                    ),
+                  ),
+                  IconButton(
+                      onPressed: () {},
+                      icon: Icon(Icons.delete, color: Colors.red))
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
