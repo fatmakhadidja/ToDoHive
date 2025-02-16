@@ -86,6 +86,11 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
+          Column(
+            children: [
+              TaskContainer(),
+            ],
+          ),
         ],
       ),
     );
