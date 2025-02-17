@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> {
                             TaskTypeContainer(
                               color: MyColors.blue,
                               imageIcon: 'assets/images/ProjectIcon.png',
-                              taskType: 'Projects',
+                              taskType: 'Education',
                               taskNumber: 10,
                               pressedTasks: pressedTasks,
                               index: 0,
@@ -155,7 +155,9 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, '/addTask');
+        },
         backgroundColor: MyColors.mainPurple,
         child: Icon(Icons.add, color: Colors.white),
       ),

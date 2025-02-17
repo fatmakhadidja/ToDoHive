@@ -40,7 +40,8 @@ class TaskTypeContainer extends StatefulWidget {
       required this.taskType,
       required this.taskNumber,
       required this.pressedTasks,
-      required this.index,required this.onTap});
+      required this.index,
+      required this.onTap});
 
   @override
   State<TaskTypeContainer> createState() => _TaskTypeContainerState();
@@ -104,7 +105,6 @@ class _TaskTypeContainerState extends State<TaskTypeContainer> {
     );
   }
 }
-
 
 class TaskContainer extends StatefulWidget {
   final String taskTitle;
@@ -196,6 +196,246 @@ class _TaskContainerState extends State<TaskContainer> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class TaskNameTextField extends StatefulWidget {
+  const TaskNameTextField({super.key});
+
+  @override
+  State<TaskNameTextField> createState() => _TaskNameTextFieldState();
+}
+
+class _TaskNameTextFieldState extends State<TaskNameTextField> {
+  final TextEditingController mycontroller = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      maxLines: 1,
+      controller: mycontroller,
+      decoration: InputDecoration(
+        labelText:
+            'Enter task name..', // Use labelText instead of a custom widget
+        labelStyle: TextStyle(fontSize: 12, color: Colors.grey),
+
+        enabledBorder: OutlineInputBorder(
+          // Normal state border
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Colors.grey, width: 1),
+        ),
+
+        focusedBorder: OutlineInputBorder(
+          // When clicked
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: MyColors.mainPurple, width: 2),
+        ),
+      ),
+    );
+  }
+}
+
+class CategoriesRow extends StatefulWidget {
+  const CategoriesRow({super.key});
+
+  @override
+  State<CategoriesRow> createState() => _CategoriesRowState();
+}
+
+class _CategoriesRowState extends State<CategoriesRow> {
+  List<String> categories = ["Education", "Work", "Daily Tasks", "Groceries"];
+  int selectedIndex = 0; // Track selected index
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: List.generate(categories.length, (index) {
+        bool isSelected = selectedIndex == index;
+        return GestureDetector(
+          onTap: () {
+            setState(() {
+              selectedIndex = index;
+            });
+          },
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            margin: EdgeInsets.only(right: 10),
+            decoration: BoxDecoration(
+              color: isSelected ? MyColors.mainPurple : Colors.purple[100],
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Text(
+              categories[index],
+              style: TextStyle(
+                color: isSelected ? Colors.white : Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        );
+      }),
+    );
+  }
+}
+
+class CalendarTextField extends StatefulWidget {
+  const CalendarTextField({super.key});
+
+  @override
+  State<CalendarTextField> createState() => _CalendarTextFieldState();
+}
+
+class _CalendarTextFieldState extends State<CalendarTextField> {
+  DateTime? selectedDate;
+
+  @override
+  Widget build(BuildContext context) {
+    return IntrinsicHeight(
+      child: GestureDetector(
+        onTap: () async {
+          DateTime? pickedDate = await showDatePicker(
+            context: context,
+            initialDate: selectedDate ?? DateTime.now(),
+            firstDate: DateTime(2000),
+            lastDate: DateTime(2100),
+            builder: (context, child) {
+              return Theme(
+                data: ThemeData.light().copyWith(
+                  primaryColor: MyColors.mainPurple, // Header color
+                  colorScheme: ColorScheme.light(primary: MyColors.mainPurple),
+                  buttonTheme:
+                      ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                ),
+                child: child!,
+              );
+            },
+          );
+
+          if (pickedDate != null && pickedDate != selectedDate) {
+            setState(() {
+              selectedDate = pickedDate;
+            });
+          }
+        },
+        child: Container(
+          width: MediaQuery.of(context).size.width * 0.8,
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey, width: 1),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(15),
+                child: Text(
+                  selectedDate == null
+                      ? 'Select Date'
+                      : "${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}",
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                child: IconButton(
+                  onPressed: () async {
+                    DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: selectedDate ?? DateTime.now(),
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2100),
+                      builder: (context, child) {
+                        return Theme(
+                          data: ThemeData.light().copyWith(
+                            primaryColor: MyColors.mainPurple, // Header color
+                            colorScheme:
+                                ColorScheme.light(primary: MyColors.mainPurple),
+                            buttonTheme: ButtonThemeData(
+                                textTheme: ButtonTextTheme.primary),
+                          ),
+                          child: child!,
+                        );
+                      },
+                    );
+
+                    if (pickedDate != null && pickedDate != selectedDate) {
+                      setState(() {
+                        selectedDate = pickedDate;
+                      });
+                    }
+                  },
+                  icon: Icon(
+                    Icons.calendar_month,
+                    color: Colors.purple,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class TaskDescriptionTextField extends StatefulWidget {
+  const TaskDescriptionTextField({super.key});
+
+  @override
+  State<TaskDescriptionTextField> createState() =>
+      _TaskDescriptionTextFieldState();
+}
+
+class _TaskDescriptionTextFieldState extends State<TaskDescriptionTextField> {
+  TextEditingController mycontroller = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: mycontroller,
+      maxLines: 5,
+      decoration: InputDecoration(
+        labelText:
+            'Task Description', // Use labelText instead of a custom widget
+        labelStyle: TextStyle(fontSize: 12, color: Colors.grey),
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        hintText: 'Enter task description ..',
+        hintStyle: TextStyle(fontSize: 12, color: Colors.grey),
+
+        enabledBorder: OutlineInputBorder(
+          // Normal state border
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Colors.grey, width: 1),
+        ),
+
+        focusedBorder: OutlineInputBorder(
+          // When clicked
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: MyColors.mainPurple, width: 2),
+        ),
+      ),
+    );
+  }
+}
+
+class AddTaskButton extends StatefulWidget {
+  const AddTaskButton({super.key});
+
+  @override
+  State<AddTaskButton> createState() => _AddTaskButtonState();
+}
+
+class _AddTaskButtonState extends State<AddTaskButton> {
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {},
+      style: ButtonStyle(
+          backgroundColor: WidgetStatePropertyAll(MyColors.mainPurple)),
+      child: MyText(
+        size: 14,
+        text: 'Add Task',
+        color: Colors.white,
+        weight: FontWeight.w700,
       ),
     );
   }
