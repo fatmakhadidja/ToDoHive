@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todoapp/add_task_screen.dart';
+import 'package:todoapp/edit_task_page.dart';
 import 'package:todoapp/home_page.dart';
 
 void main() {
@@ -18,7 +19,10 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: HomePage(),
-      routes: {'/addTask': (context) => AddTaskScreen()},
+      routes: {
+        '/addTask': (context) => AddTaskScreen(),
+        '/editTask': (context) => EditTaskScreen(),
+      },
     );
   }
 }

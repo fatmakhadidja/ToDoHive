@@ -2,14 +2,19 @@ import 'package:flutter/material.dart';
 
 import 'package:todoapp/core/utils.dart';
 
-class AddTaskScreen extends StatefulWidget {
-  const AddTaskScreen({super.key});
+class EditTaskScreen extends StatefulWidget {
+  final String? taskName;
+  final String? taskDescription;
+  final String? category;
+  final DateTime? date;
+  const EditTaskScreen(
+      {super.key, this.taskDescription, this.taskName, this.category,this.date});
 
   @override
-  State<AddTaskScreen> createState() => _AddTaskScreenState();
+  State<EditTaskScreen> createState() => _EditTaskScreenState();
 }
 
-class _AddTaskScreenState extends State<AddTaskScreen> {
+class _EditTaskScreenState extends State<EditTaskScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +37,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
             ]),
             MyText(
               size: 16,
-              text: 'Create New Task',
+              text: 'Edit Task',
               color: Color(0xff444444),
               weight: FontWeight.w500,
             ),
@@ -51,7 +56,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               ),
               SizedBox(height: 10),
               TaskNameTextField(
-                taskName: '',
+                taskName: widget.taskName,
               ),
             ],
           ),
@@ -59,16 +64,18 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CategoriesRow(),
+            CategoriesRow(
+              selectedCategory: getGategory(widget.category),
+            ),
           ],
         ),
         SizedBox(height: 18),
-        CalendarTextField(),
+        CalendarTextField(date: widget.date),
         SizedBox(height: 18),
         Padding(
           padding: const EdgeInsets.all(15),
           child: TaskDescriptionTextField(
-            taskDescription: '',
+            taskDescription: widget.taskDescription,
           ),
         ),
         SizedBox(height: 18),
@@ -76,4 +83,14 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       ],
     ));
   }
+}
+
+int getGategory(String? category) {
+  if (category == 'Education') return 0;
+  if (category == 'Work') return 1;
+  if (category == 'Daily Tasks') return 2;
+  if (category == 'Groceries')
+    return 3;
+  else
+    return 4;
 }

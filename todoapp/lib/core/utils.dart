@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todoapp/edit_task_page.dart';
 import 'constants.dart';
 
 class MyText extends StatelessWidget {
@@ -177,7 +178,18 @@ class _TaskContainerState extends State<TaskContainer> {
               Row(
                 children: [
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditTaskScreen(
+                              taskName: 'task name',
+                              taskDescription: 'task description',
+                              category: 'Education',
+                              date: DateTime.now()),
+                        ),
+                      );
+                    },
                     icon: Icon(
                       Icons.edit,
                       color: WidgetStateColor.resolveWith((states) {
@@ -202,14 +214,23 @@ class _TaskContainerState extends State<TaskContainer> {
 }
 
 class TaskNameTextField extends StatefulWidget {
-  const TaskNameTextField({super.key});
+  final String? taskName;
+  const TaskNameTextField({super.key, required this.taskName});
 
   @override
   State<TaskNameTextField> createState() => _TaskNameTextFieldState();
 }
 
 class _TaskNameTextFieldState extends State<TaskNameTextField> {
-  final TextEditingController mycontroller = TextEditingController();
+  late TextEditingController mycontroller;
+
+  @override
+  void initState() {
+    super.initState();
+    mycontroller = TextEditingController(
+        text: widget.taskName); // Correct place to access widget.taskName
+  }
+
   @override
   Widget build(BuildContext context) {
     return TextField(
@@ -237,7 +258,8 @@ class _TaskNameTextFieldState extends State<TaskNameTextField> {
 }
 
 class CategoriesRow extends StatefulWidget {
-  const CategoriesRow({super.key});
+  final int? selectedCategory;
+  const CategoriesRow({super.key, this.selectedCategory});
 
   @override
   State<CategoriesRow> createState() => _CategoriesRowState();
@@ -279,7 +301,8 @@ class _CategoriesRowState extends State<CategoriesRow> {
 }
 
 class CalendarTextField extends StatefulWidget {
-  const CalendarTextField({super.key});
+  final DateTime? date;
+  const CalendarTextField({super.key, this.date});
 
   @override
   State<CalendarTextField> createState() => _CalendarTextFieldState();
@@ -290,6 +313,7 @@ class _CalendarTextFieldState extends State<CalendarTextField> {
 
   @override
   Widget build(BuildContext context) {
+    selectedDate = widget.date;
     return IntrinsicHeight(
       child: GestureDetector(
         onTap: () async {
@@ -379,7 +403,8 @@ class _CalendarTextFieldState extends State<CalendarTextField> {
 }
 
 class TaskDescriptionTextField extends StatefulWidget {
-  const TaskDescriptionTextField({super.key});
+  final String? taskDescription;
+  const TaskDescriptionTextField({super.key, required this.taskDescription});
 
   @override
   State<TaskDescriptionTextField> createState() =>
@@ -387,7 +412,16 @@ class TaskDescriptionTextField extends StatefulWidget {
 }
 
 class _TaskDescriptionTextFieldState extends State<TaskDescriptionTextField> {
-  TextEditingController mycontroller = TextEditingController();
+  late TextEditingController mycontroller;
+
+  @override
+  void initState() {
+    super.initState();
+    mycontroller = TextEditingController(
+        text:
+            widget.taskDescription); // Correct place to access widget.taskName
+  }
+
   @override
   Widget build(BuildContext context) {
     return TextField(
