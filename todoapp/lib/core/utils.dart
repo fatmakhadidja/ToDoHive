@@ -31,6 +31,7 @@ class TaskTypeContainer extends StatefulWidget {
   final int taskNumber;
   List<bool> pressedTasks;
   final int index;
+  final Function(int) onTap;
 
   TaskTypeContainer(
       {super.key,
@@ -39,7 +40,7 @@ class TaskTypeContainer extends StatefulWidget {
       required this.taskType,
       required this.taskNumber,
       required this.pressedTasks,
-      required this.index});
+      required this.index,required this.onTap});
 
   @override
   State<TaskTypeContainer> createState() => _TaskTypeContainerState();
@@ -50,12 +51,7 @@ class _TaskTypeContainerState extends State<TaskTypeContainer> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        setState(() {
-          List<bool> newPressedTasks = List.from(widget.pressedTasks);
-          newPressedTasks.fillRange(0, newPressedTasks.length, false);
-          newPressedTasks[widget.index] = true;
-          widget.pressedTasks = newPressedTasks;
-        });
+        widget.onTap(widget.index); // Call the callback function
       },
       child: AnimatedContainer(
         duration: Duration(milliseconds: 100),
@@ -108,6 +104,7 @@ class _TaskTypeContainerState extends State<TaskTypeContainer> {
     );
   }
 }
+
 
 class TaskContainer extends StatefulWidget {
   final String taskTitle;

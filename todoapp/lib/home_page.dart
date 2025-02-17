@@ -11,6 +11,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<bool> pressedTasks = [true, false, false, false];
+  void _updateTaskSelection(int index) {
+    setState(() {
+      for (int i = 0; i < pressedTasks.length; i++) {
+        pressedTasks[i] = (i == index);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Map<String, String>> taskList = [
@@ -80,6 +88,7 @@ class _HomePageState extends State<HomePage> {
                               taskNumber: 10,
                               pressedTasks: pressedTasks,
                               index: 0,
+                              onTap: _updateTaskSelection,
                             ),
                             TaskTypeContainer(
                               color: MyColors.green,
@@ -88,6 +97,7 @@ class _HomePageState extends State<HomePage> {
                               taskNumber: 5,
                               pressedTasks: pressedTasks,
                               index: 1,
+                              onTap: _updateTaskSelection,
                             ),
                           ],
                         ),
@@ -102,6 +112,7 @@ class _HomePageState extends State<HomePage> {
                               taskNumber: 2,
                               pressedTasks: pressedTasks,
                               index: 2,
+                              onTap: _updateTaskSelection,
                             ),
                             TaskTypeContainer(
                               color: MyColors.brown,
@@ -110,6 +121,7 @@ class _HomePageState extends State<HomePage> {
                               taskNumber: 4,
                               pressedTasks: pressedTasks,
                               index: 3,
+                              onTap: _updateTaskSelection,
                             ),
                           ],
                         ),
