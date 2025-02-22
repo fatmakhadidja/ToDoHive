@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'core/constants.dart';
 import 'package:todoapp/core/utils.dart';
 
 class AddTaskScreen extends StatefulWidget {
@@ -10,7 +10,11 @@ class AddTaskScreen extends StatefulWidget {
 }
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
-  DateTime? selectedDate;
+  List<String> categories = ["Education", "Work", "Daily Tasks", "Groceries"];
+  DateTime selectedDate = DateTime.now();
+  String taskName = '';
+  String taskDescription = '';
+  int taskCategory = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +56,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               ),
               SizedBox(height: 10),
               TaskNameTextField(
-                taskName: '',
+                taskName: taskName,
               ),
             ],
           ),
@@ -60,12 +64,12 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CategoriesRow(),
+            CategoriesRow(selectedCategory: taskCategory),
           ],
         ),
         SizedBox(height: 18),
         CalendarTextField(
-            date: selectedDate,
+            date: DateTime.now(),
             onDateChanged: (newDate) {
               setState(() {
                 selectedDate = newDate; // Update the parent state
@@ -75,11 +79,16 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         Padding(
           padding: const EdgeInsets.all(15),
           child: TaskDescriptionTextField(
-            taskDescription: '',
+            taskDescription: taskDescription,
           ),
         ),
         SizedBox(height: 18),
-        AddTaskButton()
+        AddTaskButton(
+            taskName: taskName,
+            taskDescription: taskDescription,
+            taskCategory: categories[taskCategory],
+            date:
+                '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}')
       ],
     ));
   }

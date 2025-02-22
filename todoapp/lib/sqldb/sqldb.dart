@@ -46,8 +46,11 @@ class SqlDB {
     await db.execute('''
     CREATE TABLE "tasks" (
       "id" INTEGER PRIMARY KEY AUTOINCREMENT, 
-      "title" TEXT NOT NULL, 
-      "description" TEXT
+      "name" TEXT NOT NULL, 
+      "description" TEXT,
+      "category"  TEXT NOT NULL,
+      "isDone" INTEGER NOT NULL DEFAULT 0,
+      "date" TEXT NOT NULL
     )
     '''); // SQL query to create the 'tasks' table
 

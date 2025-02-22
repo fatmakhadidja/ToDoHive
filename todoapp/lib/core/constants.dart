@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todoapp/sqldb/sqldb.dart';
 
 class MyColors {
   static final Color mainPurple = Color(0xff9747FF);
@@ -9,3 +10,5 @@ class MyColors {
   static final Color red = Color(0xffE90707);
   static final Color lightPurple = Color(0xffE0C8FF);
 }
+
+SqlDB sqlDB = SqlDB();
