@@ -2,13 +2,18 @@ import 'package:flutter/material.dart';
 
 import 'package:todoapp/core/utils.dart';
 
+// ignore: must_be_immutable
 class EditTaskScreen extends StatefulWidget {
-  final String? taskName;
-  final String? taskDescription;
-  final String? category;
-  final DateTime? date;
-  const EditTaskScreen(
-      {super.key, this.taskDescription, this.taskName, this.category,this.date});
+  String? taskName;
+  String? taskDescription;
+  String? category;
+  DateTime? date;
+  EditTaskScreen(
+      {super.key,
+      this.taskDescription,
+      this.taskName,
+      this.category,
+      this.date});
 
   @override
   State<EditTaskScreen> createState() => _EditTaskScreenState();
@@ -70,7 +75,13 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
           ],
         ),
         SizedBox(height: 18),
-        CalendarTextField(date: widget.date),
+        CalendarTextField(
+            date: widget.date,
+            onDateChanged: (newDate) {
+              setState(() {
+                widget.date = newDate; // Update the parent state
+              });
+            }),
         SizedBox(height: 18),
         Padding(
           padding: const EdgeInsets.all(15),
@@ -79,7 +90,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
           ),
         ),
         SizedBox(height: 18),
-        AddTaskButton()
+        EditTaskButton()
       ],
     ));
   }

@@ -302,45 +302,28 @@ class _CategoriesRowState extends State<CategoriesRow> {
 
 class CalendarTextField extends StatefulWidget {
   final DateTime? date;
-  const CalendarTextField({super.key, this.date});
+  final ValueChanged<DateTime> onDateChanged; // Add this
+
+  const CalendarTextField({Key? key, this.date, required this.onDateChanged})
+      : super(key: key);
 
   @override
-  State<CalendarTextField> createState() => _CalendarTextFieldState();
+  _CalendarTextFieldState createState() => _CalendarTextFieldState();
 }
-
 class _CalendarTextFieldState extends State<CalendarTextField> {
   DateTime? selectedDate;
 
   @override
+  void initState() {
+    super.initState();
+    selectedDate = widget.date; // Initialize state with provided date
+  }
+
+  @override
   Widget build(BuildContext context) {
-    selectedDate = widget.date;
     return IntrinsicHeight(
       child: GestureDetector(
-        onTap: () async {
-          DateTime? pickedDate = await showDatePicker(
-            context: context,
-            initialDate: selectedDate ?? DateTime.now(),
-            firstDate: DateTime(2000),
-            lastDate: DateTime(2100),
-            builder: (context, child) {
-              return Theme(
-                data: ThemeData.light().copyWith(
-                  primaryColor: MyColors.mainPurple, // Header color
-                  colorScheme: ColorScheme.light(primary: MyColors.mainPurple),
-                  buttonTheme:
-                      ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                ),
-                child: child!,
-              );
-            },
-          );
-
-          if (pickedDate != null && pickedDate != selectedDate) {
-            setState(() {
-              selectedDate = pickedDate;
-            });
-          }
-        },
+        onTap: () => _selectDate(context),
         child: Container(
           width: MediaQuery.of(context).size.width * 0.8,
           decoration: BoxDecoration(
@@ -362,32 +345,7 @@ class _CalendarTextFieldState extends State<CalendarTextField> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                 child: IconButton(
-                  onPressed: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: selectedDate ?? DateTime.now(),
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2100),
-                      builder: (context, child) {
-                        return Theme(
-                          data: ThemeData.light().copyWith(
-                            primaryColor: MyColors.mainPurple, // Header color
-                            colorScheme:
-                                ColorScheme.light(primary: MyColors.mainPurple),
-                            buttonTheme: ButtonThemeData(
-                                textTheme: ButtonTextTheme.primary),
-                          ),
-                          child: child!,
-                        );
-                      },
-                    );
-
-                    if (pickedDate != null && pickedDate != selectedDate) {
-                      setState(() {
-                        selectedDate = pickedDate;
-                      });
-                    }
-                  },
+                  onPressed: () => _selectDate(context),
                   icon: Icon(
                     Icons.calendar_month,
                     color: Colors.purple,
@@ -400,7 +358,36 @@ class _CalendarTextFieldState extends State<CalendarTextField> {
       ),
     );
   }
+
+  Future<void> _selectDate(BuildContext context) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: selectedDate ?? DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: MyColors.mainPurple,
+            colorScheme: ColorScheme.light(primary: MyColors.mainPurple),
+            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (pickedDate != null && pickedDate != selectedDate) {
+      setState(() {
+        selectedDate = pickedDate;
+      });
+
+      // Notify parent widget about the change
+      widget.onDateChanged(pickedDate);
+    }
+  }
 }
+
 
 class TaskDescriptionTextField extends StatefulWidget {
   final String? taskDescription;
@@ -468,6 +455,30 @@ class _AddTaskButtonState extends State<AddTaskButton> {
       child: MyText(
         size: 14,
         text: 'Add Task',
+        color: Colors.white,
+        weight: FontWeight.w700,
+      ),
+    );
+  }
+}
+
+class EditTaskButton extends StatefulWidget {
+  const EditTaskButton({super.key});
+
+  @override
+  State<EditTaskButton> createState() => _EditTaskButtonState();
+}
+
+class _EditTaskButtonState extends State<EditTaskButton> {
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {},
+      style: ButtonStyle(
+          backgroundColor: WidgetStatePropertyAll(MyColors.mainPurple)),
+      child: MyText(
+        size: 14,
+        text: 'Save Changes',
         color: Colors.white,
         weight: FontWeight.w700,
       ),

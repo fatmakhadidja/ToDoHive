@@ -10,6 +10,7 @@ class AddTaskScreen extends StatefulWidget {
 }
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
+  DateTime? selectedDate;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +64,13 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           ],
         ),
         SizedBox(height: 18),
-        CalendarTextField(),
+        CalendarTextField(
+            date: selectedDate,
+            onDateChanged: (newDate) {
+              setState(() {
+                selectedDate = newDate; // Update the parent state
+              });
+            }),
         SizedBox(height: 18),
         Padding(
           padding: const EdgeInsets.all(15),
