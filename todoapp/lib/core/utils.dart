@@ -57,7 +57,7 @@ class _TaskTypeContainerState extends State<TaskTypeContainer> {
       },
       child: AnimatedContainer(
         duration: Duration(milliseconds: 100),
-        width: MediaQuery.of(context).size.width * 0.48,
+        width: MediaQuery.of(context).size.width * 0.47,
         height: MediaQuery.of(context).size.height * 0.18,
         decoration: BoxDecoration(
           color: widget.color,
@@ -277,32 +277,35 @@ class _CategoriesRowState extends State<CategoriesRow> {
   // Track selected index
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: List.generate(categories.length, (index) {
-        bool isSelected = widget.selectedCategory == index;
-        return GestureDetector(
-          onTap: () {
-            setState(() {
-              widget.selectedCategory = index;
-            });
-          },
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-            margin: EdgeInsets.only(right: 10),
-            decoration: BoxDecoration(
-              color: isSelected ? MyColors.mainPurple : Colors.purple[100],
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Text(
-              categories[index],
-              style: TextStyle(
-                color: isSelected ? Colors.white : Colors.black,
-                fontWeight: FontWeight.bold,
+    return Padding(
+         padding: EdgeInsets.all(8),
+      child: Row(
+        children: List.generate(categories.length, (index) {
+          bool isSelected = widget.selectedCategory == index;
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                widget.selectedCategory = index;
+              });
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+              margin: EdgeInsets.only(right: 10),
+              decoration: BoxDecoration(
+                color: isSelected ? MyColors.mainPurple : Colors.purple[100],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                categories[index],
+                style: TextStyle(
+                  color: isSelected ? Colors.white : Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          ),
-        );
-      }),
+          );
+        }),
+      ),
     );
   }
 }
@@ -458,7 +461,12 @@ class AddTaskButton extends StatefulWidget {
   final String date;
   final String taskCategory;
 
-  const AddTaskButton({super.key,required this.taskDescription,required this.taskName,required this.date,required this.taskCategory});
+  const AddTaskButton(
+      {super.key,
+      required this.taskDescription,
+      required this.taskName,
+      required this.date,
+      required this.taskCategory});
 
   @override
   State<AddTaskButton> createState() => _AddTaskButtonState();
@@ -469,7 +477,8 @@ class _AddTaskButtonState extends State<AddTaskButton> {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        sqlDB.insertData("INSERT INTO 'tasks' (name,description,category,isDone,date) VALUES (${widget.taskName},${widget.taskDescription},${widget.taskCategory},0,${widget.date}) ");
+        sqlDB.insertData(
+            "INSERT INTO tasks (name, description, category, isDone, date) VALUES ('${widget.taskName}', '${widget.taskDescription}', '${widget.taskCategory}', 0, '${widget.date}')");
       },
       style: ButtonStyle(
           backgroundColor: WidgetStatePropertyAll(MyColors.mainPurple)),
