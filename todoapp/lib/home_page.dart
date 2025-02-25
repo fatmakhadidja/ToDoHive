@@ -21,6 +21,33 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    DateTime? selectedDate;
+
+    Future<void> _selectDate(BuildContext context) async {
+      DateTime? pickedDate = await showDatePicker(
+        context: context,
+        initialDate: selectedDate ?? DateTime.now(),
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2100),
+        builder: (context, child) {
+          return Theme(
+            data: ThemeData.light().copyWith(
+              primaryColor: MyColors.mainPurple,
+              colorScheme: ColorScheme.light(primary: MyColors.mainPurple),
+              buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+            ),
+            child: child!,
+          );
+        },
+      );
+
+      if (pickedDate != null && pickedDate != selectedDate) {
+        setState(() {
+          selectedDate = pickedDate; // Update the selected date
+        });
+      }
+    }
+
     List<Map<String, String>> taskList = [
       {
         'taskTitle': 'Task 1',
@@ -43,7 +70,7 @@ class _HomePageState extends State<HomePage> {
               Stack(children: [
                 Image(image: AssetImage('assets/images/homePageTopImage.png')),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 18, 0, 10),
+                  padding: const EdgeInsets.fromLTRB(8, 25, 0, 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -63,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ]),
               IconButton(
-                  onPressed: () {},
+                  onPressed: () => _selectDate(context),
                   icon: Icon(
                     Icons.edit_calendar,
                     color: Colors.black,
