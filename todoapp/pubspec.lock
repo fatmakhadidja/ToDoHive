@@ -93,10 +93,10 @@ packages:
     dependency: transitive
     description:
       name: dev_build
-      sha256: "5ed4fe61cead9fd561f13c7a05f6c11002ecc8ec6f5be33f7b9674f49f245434"
+      sha256: "43422b4e090a3bad7c1d612862bdf26c64e78a3624ecd780679df21384e8e91a"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.2"
+    version: "1.1.2+2"
   fake_async:
     dependency: transitive
     description:

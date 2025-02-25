@@ -130,15 +130,20 @@ class _TaskContainerState extends State<TaskContainer> {
           padding: EdgeInsets.all(8),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
-            border: Border.all(
-                color: WidgetStateColor.resolveWith((states) {
-                  if (isChecked) {
-                    return MyColors.mainPurple;
-                  }
-                  return Color(0xff757575);
-                }),
-                width: 1.5),
-            color: Colors.white,
+            // border: Border.all(
+            //     color: WidgetStateColor.resolveWith((states) {
+            //       if (isChecked) {
+            //         return MyColors.mainPurple;
+            //       }
+            //       return Color(0xff757575);
+            //     }),
+            //     width: 1.5),
+            color: WidgetStateColor.resolveWith((states) {
+              if (isChecked) {
+                return const Color.fromARGB(255, 165, 219, 167);
+              }
+              return const Color.fromARGB(255, 231, 231, 231);
+            }),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -146,7 +151,7 @@ class _TaskContainerState extends State<TaskContainer> {
               Row(
                 children: [
                   Checkbox(
-                    activeColor: MyColors.mainPurple,
+                    activeColor: Color.fromARGB(255, 231, 231, 231),
                     value: isChecked,
                     onChanged: (bool? value) {
                       setState(() {
@@ -160,13 +165,23 @@ class _TaskContainerState extends State<TaskContainer> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         MyText(
-                            color: Colors.black,
+                            color: WidgetStateColor.resolveWith((states) {
+                              if (isChecked) {
+                                return Colors.white;
+                              }
+                              return Colors.black;
+                            }),
                             size: 17,
                             text: widget.taskTitle,
                             weight: FontWeight.w900),
                         SizedBox(height: 5),
                         MyText(
-                            color: Color(0xff757575),
+                            color: WidgetStateColor.resolveWith((states) {
+                              if (isChecked) {
+                                return Colors.white;
+                              }
+                              return Colors.black;
+                            }),
                             size: 11,
                             text: widget.taskDescription,
                             weight: FontWeight.w500),
@@ -194,7 +209,7 @@ class _TaskContainerState extends State<TaskContainer> {
                       Icons.edit,
                       color: WidgetStateColor.resolveWith((states) {
                         if (isChecked) {
-                          return MyColors.mainPurple;
+                          return Colors.white;
                         }
                         return Color(0xff757575);
                       }),
@@ -245,7 +260,7 @@ class _TaskNameTextFieldState extends State<TaskNameTextField> {
       decoration: InputDecoration(
         labelText:
             'Enter task name..', // Use labelText instead of a custom widget
-        labelStyle: TextStyle(fontSize: 12, color: Colors.grey),
+        labelStyle: TextStyle(fontSize: 14, color: Colors.grey),
 
         enabledBorder: OutlineInputBorder(
           // Normal state border
@@ -278,8 +293,9 @@ class _CategoriesRowState extends State<CategoriesRow> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-         padding: EdgeInsets.all(8),
+      padding: EdgeInsets.all(8),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: List.generate(categories.length, (index) {
           bool isSelected = widget.selectedCategory == index;
           return GestureDetector(
@@ -289,7 +305,7 @@ class _CategoriesRowState extends State<CategoriesRow> {
               });
             },
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
               margin: EdgeInsets.only(right: 10),
               decoration: BoxDecoration(
                 color: isSelected ? MyColors.mainPurple : Colors.purple[100],
@@ -434,10 +450,10 @@ class _TaskDescriptionTextFieldState extends State<TaskDescriptionTextField> {
       decoration: InputDecoration(
         labelText:
             'Task Description', // Use labelText instead of a custom widget
-        labelStyle: TextStyle(fontSize: 12, color: Colors.grey),
+        labelStyle: TextStyle(fontSize: 14, color: Colors.grey),
         floatingLabelBehavior: FloatingLabelBehavior.always,
         hintText: 'Enter task description ..',
-        hintStyle: TextStyle(fontSize: 12, color: Colors.grey),
+        hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
 
         enabledBorder: OutlineInputBorder(
           // Normal state border

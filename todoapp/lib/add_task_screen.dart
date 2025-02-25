@@ -19,80 +19,83 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Row(
-            children: [
-              Stack(children: [
-                Image(image: AssetImage('assets/images/homePageTopImage.png')),
-                Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 18, 0, 10),
-                    child: IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(Icons.arrow_back),
-                      color: Colors.black,
-                    )),
-              ]),
-              MyText(
-                size: 16,
-                text: 'Create New Task',
-                color: Color(0xff444444),
-                weight: FontWeight.w500,
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.all(15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+        body: SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
               children: [
+                Stack(children: [
+                  Image(
+                      image: AssetImage('assets/images/homePageTopImage.png')),
+                  Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 18, 0, 10),
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: Icon(Icons.arrow_back),
+                        color: Colors.black,
+                      )),
+                ]),
                 MyText(
                   size: 16,
-                  text: 'Task Name',
-                  color: Colors.black,
-                  weight: FontWeight.w800,
-                ),
-                SizedBox(height: 10),
-                TaskNameTextField(
-                  taskName: taskName,
+                  text: 'Create New Task',
+                  color: Color(0xff444444),
+                  weight: FontWeight.w500,
                 ),
               ],
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              CategoriesRow(selectedCategory: taskCategory),
-            ],
-          ),
-          SizedBox(height: 18),
-          CalendarTextField(
-              date: DateTime.now(),
-              onDateChanged: (newDate) {
-                setState(() {
-                  selectedDate = newDate; // Update the parent state
-                });
-              }),
-          SizedBox(height: 18),
-          Padding(
-            padding: const EdgeInsets.all(15),
-            child: TaskDescriptionTextField(
-              taskDescription: taskDescription,
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  MyText(
+                    size: 16,
+                    text: 'Task Name',
+                    color: Colors.black,
+                    weight: FontWeight.w800,
+                  ),
+                  SizedBox(height: 10),
+                  TaskNameTextField(
+                    taskName: taskName,
+                  ),
+                ],
+              ),
             ),
-          ),
-          SizedBox(height: 18),
-          AddTaskButton(
-              taskName: taskName,
-              taskDescription: taskDescription,
-              taskCategory: categories[taskCategory],
-              date:
-                  '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}')
-        ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                CategoriesRow(selectedCategory: taskCategory),
+              ],
+            ),
+            SizedBox(height: 18),
+            CalendarTextField(
+                date: DateTime.now(),
+                onDateChanged: (newDate) {
+                  setState(() {
+                    selectedDate = newDate; // Update the parent state
+                  });
+                }),
+            SizedBox(height: 18),
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: TaskDescriptionTextField(
+                taskDescription: taskDescription,
+              ),
+            ),
+            SizedBox(height: 18),
+            AddTaskButton(
+                taskName: taskName,
+                taskDescription: taskDescription,
+                taskCategory: categories[taskCategory],
+                date:
+                    '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}')
+          ],
+        ),
       ),
     ));
   }
