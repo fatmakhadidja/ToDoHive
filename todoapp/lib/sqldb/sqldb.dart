@@ -59,15 +59,20 @@ class SqlDB {
 
   // Method to retrieve data using a raw SQL query
   getData(String sql) async {
-    Database? mydb = await db; // Get database instance
-    List<Map> response = await mydb!.rawQuery(sql); // Execute SELECT query
+    Database? mydb = await db;
+    print(
+        'db accesses ====================================='); // Get database instance
+    List<Map<String, dynamic>> response =
+        await mydb!.rawQuery(sql); // Execute SELECT query
     return response; // Return fetched data as a list of maps
   }
 
   // Method to insert data into the database
   insertData(String sql) async {
     Database? mydb = await db; // Get database instance
-    int response = await mydb!.rawInsert(sql); // Execute INSERT query
+    int response = await mydb!.rawInsert(sql);
+    print("Inserted data $response ============================");
+    // Execute INSERT query
     return response; // Return the row ID of the inserted record
   }
 

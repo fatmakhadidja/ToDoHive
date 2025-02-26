@@ -230,8 +230,11 @@ class _TaskContainerState extends State<TaskContainer> {
 
 // ignore: must_be_immutable
 class TaskNameTextField extends StatefulWidget {
-  String? taskName;
-  TaskNameTextField({super.key, required this.taskName});
+  final String taskName;
+  final Function(String) onNameChanged;
+
+  TaskNameTextField(
+      {super.key, required this.taskName, required this.onNameChanged});
 
   @override
   State<TaskNameTextField> createState() => _TaskNameTextFieldState();
@@ -243,8 +246,7 @@ class _TaskNameTextFieldState extends State<TaskNameTextField> {
   @override
   void initState() {
     super.initState();
-    mycontroller = TextEditingController(
-        text: widget.taskName); // Correct place to access widget.taskName
+    mycontroller = TextEditingController(text: widget.taskName);
   }
 
   @override
@@ -252,24 +254,15 @@ class _TaskNameTextFieldState extends State<TaskNameTextField> {
     return TextField(
       maxLines: 1,
       controller: mycontroller,
-      onChanged: (value) {
-        setState(() {
-          widget.taskName = value;
-        });
-      },
+      onChanged: widget.onNameChanged, // Call parent function
       decoration: InputDecoration(
-        labelText:
-            'Enter task name..', // Use labelText instead of a custom widget
+        labelText: 'Enter task name..',
         labelStyle: TextStyle(fontSize: 14, color: Colors.grey),
-
         enabledBorder: OutlineInputBorder(
-          // Normal state border
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(color: Colors.grey, width: 1),
         ),
-
         focusedBorder: OutlineInputBorder(
-          // When clicked
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(color: MyColors.mainPurple, width: 2),
         ),
@@ -280,8 +273,13 @@ class _TaskNameTextFieldState extends State<TaskNameTextField> {
 
 // ignore: must_be_immutable
 class CategoriesRow extends StatefulWidget {
-  int? selectedCategory;
-  CategoriesRow({super.key, this.selectedCategory});
+  final int selectedCategory;
+  final Function(int) onCategorySelected;
+
+  CategoriesRow(
+      {super.key,
+      required this.selectedCategory,
+      required this.onCategorySelected});
 
   @override
   State<CategoriesRow> createState() => _CategoriesRowState();
@@ -289,7 +287,7 @@ class CategoriesRow extends StatefulWidget {
 
 class _CategoriesRowState extends State<CategoriesRow> {
   List<String> categories = ["Education", "Work", "Daily Tasks", "Groceries"];
-  // Track selected index
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -300,9 +298,7 @@ class _CategoriesRowState extends State<CategoriesRow> {
           bool isSelected = widget.selectedCategory == index;
           return GestureDetector(
             onTap: () {
-              setState(() {
-                widget.selectedCategory = index;
-              });
+              widget.onCategorySelected(index); // Notify parent widget
             },
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
@@ -417,8 +413,13 @@ class _CalendarTextFieldState extends State<CalendarTextField> {
 
 // ignore: must_be_immutable
 class TaskDescriptionTextField extends StatefulWidget {
-  String? taskDescription;
-  TaskDescriptionTextField({super.key, required this.taskDescription});
+  final String taskDescription;
+  final Function(String) onDescriptionChanged;
+
+  TaskDescriptionTextField(
+      {super.key,
+      required this.taskDescription,
+      required this.onDescriptionChanged});
 
   @override
   State<TaskDescriptionTextField> createState() =>
@@ -431,37 +432,26 @@ class _TaskDescriptionTextFieldState extends State<TaskDescriptionTextField> {
   @override
   void initState() {
     super.initState();
-    mycontroller = TextEditingController(
-        text:
-            widget.taskDescription); // Correct place to access widget.taskName
+    mycontroller = TextEditingController(text: widget.taskDescription);
   }
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: mycontroller,
-      onChanged: (value) {
-        setState(() {
-          widget.taskDescription = value;
-        });
-      },
+      onChanged: widget.onDescriptionChanged, // Call parent function
       maxLines: 5,
       decoration: InputDecoration(
-        labelText:
-            'Task Description', // Use labelText instead of a custom widget
+        labelText: 'Task Description',
         labelStyle: TextStyle(fontSize: 14, color: Colors.grey),
         floatingLabelBehavior: FloatingLabelBehavior.always,
         hintText: 'Enter task description ..',
         hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
-
         enabledBorder: OutlineInputBorder(
-          // Normal state border
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(color: Colors.grey, width: 1),
         ),
-
         focusedBorder: OutlineInputBorder(
-          // When clicked
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(color: MyColors.mainPurple, width: 2),
         ),
@@ -470,33 +460,16 @@ class _TaskDescriptionTextFieldState extends State<TaskDescriptionTextField> {
   }
 }
 
-class AddTaskButton extends StatefulWidget {
-  final String taskName;
-  final String taskDescription;
-  final String date;
-  final String taskCategory;
+class AddTaskButton extends StatelessWidget {
+  const AddTaskButton({super.key});
 
-  const AddTaskButton(
-      {super.key,
-      required this.taskDescription,
-      required this.taskName,
-      required this.date,
-      required this.taskCategory});
-
-  @override
-  State<AddTaskButton> createState() => _AddTaskButtonState();
-}
-
-class _AddTaskButtonState extends State<AddTaskButton> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
-        sqlDB.insertData(
-            "INSERT INTO tasks (name, description, category, isDone, date) VALUES ('${widget.taskName}', '${widget.taskDescription}', '${widget.taskCategory}', 0, '${widget.date}')");
-      },
+      onPressed: null, // This will be handled in the GestureDetector above
       style: ButtonStyle(
-          backgroundColor: WidgetStatePropertyAll(MyColors.mainPurple)),
+        backgroundColor: WidgetStatePropertyAll(MyColors.mainPurple),
+      ),
       child: MyText(
         size: 14,
         text: 'Add Task',

@@ -24,9 +24,9 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SingleChildScrollView(
-          child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
           Row(
             children: [
               Stack(children: [
@@ -61,18 +61,18 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                   weight: FontWeight.w800,
                 ),
                 SizedBox(height: 10),
-                TaskNameTextField(
-                  taskName: widget.taskName,
-                ),
+                // TaskNameTextField(
+                //   taskName: widget.taskName,
+                // ),
               ],
             ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CategoriesRow(
-                selectedCategory: getGategory(widget.category),
-              ),
+              // CategoriesRow(
+              //   selectedCategory: getGategory(widget.category),
+              // ),
             ],
           ),
           SizedBox(height: 18),
@@ -86,15 +86,15 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
           SizedBox(height: 18),
           Padding(
             padding: const EdgeInsets.all(15),
-            child: TaskDescriptionTextField(
-              taskDescription: widget.taskDescription,
-            ),
+            // child: TaskDescriptionTextField(
+            //   taskDescription: widget.taskDescription,
+            // ),
           ),
           SizedBox(height: 18),
           EditTaskButton()
-                ],
-              ),
-        ));
+        ],
+      ),
+    ));
   }
 }
 

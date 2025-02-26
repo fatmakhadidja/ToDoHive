@@ -18,6 +18,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   int taskCategory = 0;
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
         body: SingleChildScrollView(
       child: Padding(
@@ -62,6 +63,11 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   SizedBox(height: 10),
                   TaskNameTextField(
                     taskName: taskName,
+                    onNameChanged: (newName) {
+                      setState(() {
+                        taskName = newName;
+                      });
+                    },
                   ),
                 ],
               ),
@@ -69,7 +75,14 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                CategoriesRow(selectedCategory: taskCategory),
+                CategoriesRow(
+                  selectedCategory: taskCategory,
+                  onCategorySelected: (int newCategory) {
+                    setState(() {
+                      taskCategory = newCategory;
+                    });
+                  },
+                ),
               ],
             ),
             SizedBox(height: 18),
@@ -85,15 +98,23 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               padding: const EdgeInsets.all(15),
               child: TaskDescriptionTextField(
                 taskDescription: taskDescription,
+                onDescriptionChanged: (newDescription) {
+                  setState(() {
+                    taskDescription = newDescription;
+                  });
+                },
               ),
             ),
             SizedBox(height: 18),
-            AddTaskButton(
-                taskName: taskName,
-                taskDescription: taskDescription,
-                taskCategory: categories[taskCategory],
-                date:
-                    '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}')
+            GestureDetector(
+              onTap: () {
+                print('button tapped');
+                sqlDB.insertData(
+                    "INSERT INTO tasks (name, description, category, isDone, date) VALUES ('$taskName', '$taskDescription', '$taskCategory', 0, '$selectedDate')");
+                Navigator.pop(context,true);
+              },
+              child: AddTaskButton(),
+            )
           ],
         ),
       ),

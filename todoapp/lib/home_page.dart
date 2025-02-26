@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todoapp/core/utils.dart';
 import 'package:todoapp/core/constants.dart';
+import 'add_task_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,6 +12,45 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<bool> pressedTasks = [true, false, false, false];
+  DateTime? selectedDate;
+  List<Map<String, dynamic>> taskList = []; // Store tasks here
+  bool isLoading = true; // To track loading state
+
+  void navigateToAddTaskScreen() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => AddTaskScreen()),
+    );
+
+    if (result == true) {
+      setState(() {
+        fetchTasks();
+      }); // Triggers rebuild when returning
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchTasks(); // Fetch tasks when the screen loads
+  }
+
+  Future<void> fetchTasks() async {
+    try {
+      List<Map<String, dynamic>> tasks =
+          await sqlDB.getData("SELECT * FROM 'tasks'");
+      setState(() {
+        taskList = tasks;
+        isLoading = false;
+      });
+    } catch (e) {
+      print("Error fetching tasks: $e");
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
   void _updateTaskSelection(int index) {
     setState(() {
       for (int i = 0; i < pressedTasks.length; i++) {
@@ -19,82 +59,72 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Future<void> selectDate(BuildContext context) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: selectedDate ?? DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: MyColors.mainPurple,
+            colorScheme: ColorScheme.light(primary: MyColors.mainPurple),
+            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (pickedDate != null && pickedDate != selectedDate) {
+      setState(() {
+        selectedDate = pickedDate;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    DateTime? selectedDate;
-
-    Future<void> selectDate(BuildContext context) async {
-      DateTime? pickedDate = await showDatePicker(
-        context: context,
-        initialDate: selectedDate ?? DateTime.now(),
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2100),
-        builder: (context, child) {
-          return Theme(
-            data: ThemeData.light().copyWith(
-              primaryColor: MyColors.mainPurple,
-              colorScheme: ColorScheme.light(primary: MyColors.mainPurple),
-              buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
-            ),
-            child: child!,
-          );
-        },
-      );
-
-      if (pickedDate != null && pickedDate != selectedDate) {
-        setState(() {
-          selectedDate = pickedDate; // Update the selected date
-        });
-      }
-    }
-
-    List<Map<String, String>> taskList = [
-      {
-        'taskTitle': 'Task 1',
-        'taskDescription': 'Complete the Flutter project'
-      },
-      {'taskTitle': 'Task 2', 'taskDescription': 'Review UI design'},
-      {'taskTitle': 'Task 3', 'taskDescription': 'Write documentation'},
-      {
-        'taskTitle': 'Task 3',
-        'taskDescription':
-            'Write documentation\n Write documentation\n Write documentation'
-      },
-    ];
     return Scaffold(
       body: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Stack(children: [
-                Image(image: AssetImage('assets/images/homePageTopImage.png')),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 25, 0, 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      MyText(
+              Stack(
+                children: [
+                  Image(
+                      image: AssetImage('assets/images/homePageTopImage.png')),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 25, 0, 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        MyText(
                           size: 16,
                           text: 'Hello,',
                           weight: FontWeight.bold,
-                          color: Colors.black),
-                      MyText(
-                        size: 9,
-                        text: 'Let\'s get started',
-                        color: Color(0xff757575),
-                        weight: FontWeight.w300,
-                      )
-                    ],
+                          color: Colors.black,
+                        ),
+                        MyText(
+                          size: 9,
+                          text: 'Let\'s get started',
+                          color: Color(0xff757575),
+                          weight: FontWeight.w300,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ]),
+                ],
+              ),
               IconButton(
-                  onPressed: () => selectDate(context),
-                  icon: Icon(
-                    Icons.edit_calendar,
-                    color: Colors.black,
-                  ))
+                onPressed: () => selectDate(context),
+                icon: Icon(
+                  Icons.edit_calendar,
+                  color: Colors.black,
+                ),
+              )
             ],
           ),
           Expanded(
@@ -155,26 +185,32 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
-                  taskList.isEmpty
+                  isLoading
                       ? Padding(
-                          padding: const EdgeInsets.all(15),
-                          child: Center(
-                              child: MyText(
-                            size: 18,
-                            text: ' You Have No Tasks Today',
-                            color: Colors.black,
-                            weight: FontWeight.w500,
-                          )),
+                          padding: const EdgeInsets.all(20.0),
+                          child: Center(child: CircularProgressIndicator()),
                         )
-                      : Column(
-                          children: taskList
-                              .map((task) => TaskContainer(
-                                    taskTitle: task['taskTitle'] ?? 'No Title',
-                                    taskDescription: task['taskDescription'] ??
-                                        'No Description',
-                                  ))
-                              .toList(),
-                        ),
+                      : taskList.isEmpty
+                          ? Padding(
+                              padding: const EdgeInsets.all(15),
+                              child: Center(
+                                child: MyText(
+                                  size: 18,
+                                  text: 'You Have No Tasks Today',
+                                  color: Colors.black,
+                                  weight: FontWeight.w500,
+                                ),
+                              ),
+                            )
+                          : Column(
+                              children: taskList
+                                  .map((task) => TaskContainer(
+                                        taskTitle: task['name'] ?? 'No Title',
+                                        taskDescription: task['description'] ??
+                                            'No Description',
+                                      ))
+                                  .toList(),
+                            ),
                 ],
               ),
             ),
@@ -183,7 +219,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, '/addTask');
+          navigateToAddTaskScreen();
         },
         backgroundColor: MyColors.mainPurple,
         child: Icon(Icons.add, color: Colors.white),
