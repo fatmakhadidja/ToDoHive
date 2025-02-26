@@ -15,6 +15,7 @@ class _HomePageState extends State<HomePage> {
   DateTime? selectedDate;
   List<Map<String, dynamic>> taskList = []; // Store tasks here
   bool isLoading = true; // To track loading state
+  int indicator = 0;
 
   void navigateToAddTaskScreen() async {
     final result = await Navigator.push(
@@ -205,9 +206,17 @@ class _HomePageState extends State<HomePage> {
                           : Column(
                               children: taskList
                                   .map((task) => TaskContainer(
+                                        isChecked: task['isDone'] == 1,
                                         taskTitle: task['name'] ?? 'No Title',
                                         taskDescription: task['description'] ??
                                             'No Description',
+                                        onStateChanged: (newValue) {
+                                          setState(() {
+                                            sqlDB.updateData(
+                                                "UPDATE tasks SET isDone = $newValue WHERE id = ${task['id']};");
+                                                fetchTasks();
+                                          });
+                                        },
                                       ))
                                   .toList(),
                             ),

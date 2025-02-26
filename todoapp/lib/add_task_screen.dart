@@ -18,7 +18,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   int taskCategory = 0;
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
         body: SingleChildScrollView(
       child: Padding(
@@ -108,10 +107,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
             SizedBox(height: 18),
             GestureDetector(
               onTap: () {
-                print('button tapped');
                 sqlDB.insertData(
                     "INSERT INTO tasks (name, description, category, isDone, date) VALUES ('$taskName', '$taskDescription', '$taskCategory', 0, '$selectedDate')");
-                Navigator.pop(context,true);
+
+                Navigator.pop(context, true);
               },
               child: AddTaskButton(),
             )

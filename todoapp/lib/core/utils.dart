@@ -110,16 +110,21 @@ class _TaskTypeContainerState extends State<TaskTypeContainer> {
 class TaskContainer extends StatefulWidget {
   final String taskTitle;
   final String taskDescription;
+  bool isChecked;
+  final Function(int) onStateChanged;
 
-  const TaskContainer(
-      {super.key, required this.taskTitle, required this.taskDescription});
+  TaskContainer(
+      {super.key,
+      required this.taskTitle,
+      required this.taskDescription,
+      required this.onStateChanged,
+      required this.isChecked});
 
   @override
   State<TaskContainer> createState() => _TaskContainerState();
 }
 
 class _TaskContainerState extends State<TaskContainer> {
-  bool isChecked = false;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -130,17 +135,9 @@ class _TaskContainerState extends State<TaskContainer> {
           padding: EdgeInsets.all(8),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
-            // border: Border.all(
-            //     color: WidgetStateColor.resolveWith((states) {
-            //       if (isChecked) {
-            //         return MyColors.mainPurple;
-            //       }
-            //       return Color(0xff757575);
-            //     }),
-            //     width: 1.5),
             color: WidgetStateColor.resolveWith((states) {
-              if (isChecked) {
-                return const Color.fromARGB(255, 165, 219, 167);
+              if (widget.isChecked) {
+                return const Color.fromARGB(255, 157, 211, 158);
               }
               return const Color.fromARGB(255, 231, 231, 231);
             }),
@@ -151,14 +148,18 @@ class _TaskContainerState extends State<TaskContainer> {
               Row(
                 children: [
                   Checkbox(
-                    activeColor: Color.fromARGB(255, 231, 231, 231),
-                    value: isChecked,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        isChecked = value ?? false;
-                      });
-                    },
-                  ),
+                      activeColor: Color.fromARGB(255, 231, 231, 231),
+                      value: widget.isChecked,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          widget.isChecked = value == true
+                              ? true
+                              : false; 
+                        });
+
+                        int newValue = widget.isChecked ? 1 : 0;
+                        widget.onStateChanged(newValue); 
+                      }),
                   Padding(
                     padding: const EdgeInsets.all(10),
                     child: Column(
@@ -166,7 +167,7 @@ class _TaskContainerState extends State<TaskContainer> {
                       children: [
                         MyText(
                             color: WidgetStateColor.resolveWith((states) {
-                              if (isChecked) {
+                              if (widget.isChecked) {
                                 return Colors.white;
                               }
                               return Colors.black;
@@ -177,7 +178,7 @@ class _TaskContainerState extends State<TaskContainer> {
                         SizedBox(height: 5),
                         MyText(
                             color: WidgetStateColor.resolveWith((states) {
-                              if (isChecked) {
+                              if (widget.isChecked) {
                                 return Colors.white;
                               }
                               return Colors.black;
@@ -208,7 +209,7 @@ class _TaskContainerState extends State<TaskContainer> {
                     icon: Icon(
                       Icons.edit,
                       color: WidgetStateColor.resolveWith((states) {
-                        if (isChecked) {
+                        if (widget.isChecked) {
                           return Colors.white;
                         }
                         return Color(0xff757575);
