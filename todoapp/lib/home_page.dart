@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     DateTime? selectedDate;
 
-    Future<void> _selectDate(BuildContext context) async {
+    Future<void> selectDate(BuildContext context) async {
       DateTime? pickedDate = await showDatePicker(
         context: context,
         initialDate: selectedDate ?? DateTime.now(),
@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ]),
               IconButton(
-                  onPressed: () => _selectDate(context),
+                  onPressed: () => selectDate(context),
                   icon: Icon(
                     Icons.edit_calendar,
                     color: Colors.black,

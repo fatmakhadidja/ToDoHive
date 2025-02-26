@@ -331,8 +331,7 @@ class CalendarTextField extends StatefulWidget {
   DateTime? date;
   final ValueChanged<DateTime> onDateChanged; // Add this
 
-  CalendarTextField({Key? key, this.date, required this.onDateChanged})
-      : super(key: key);
+  CalendarTextField({super.key, this.date, required this.onDateChanged});
 
   @override
   _CalendarTextFieldState createState() => _CalendarTextFieldState();

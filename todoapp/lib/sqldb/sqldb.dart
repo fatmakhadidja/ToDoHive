@@ -36,7 +36,7 @@ class SqlDB {
   }
 
   // Method called when the database version is upgraded
-  _onUpgrade(Database db, int old_version, int new_version) async {
+  _onUpgrade(Database db, int oldVersion, int newVersion) async {
     print("onUpgrade ===============================");
     // This is where you would handle schema migrations when updating the database
   }

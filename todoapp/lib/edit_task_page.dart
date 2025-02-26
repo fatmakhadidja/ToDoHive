@@ -102,8 +102,9 @@ int getGategory(String? category) {
   if (category == 'Education') return 0;
   if (category == 'Work') return 1;
   if (category == 'Daily Tasks') return 2;
-  if (category == 'Groceries')
+  if (category == 'Groceries') {
     return 3;
-  else
+  } else {
     return 4;
+  }
 }
