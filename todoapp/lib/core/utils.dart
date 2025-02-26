@@ -107,18 +107,20 @@ class _TaskTypeContainerState extends State<TaskTypeContainer> {
   }
 }
 
+// ignore: must_be_immutable
 class TaskContainer extends StatefulWidget {
   final String taskTitle;
   final String taskDescription;
   bool isChecked;
   final Function(int) onStateChanged;
+  final Function () onTaskDeleted;
 
   TaskContainer(
       {super.key,
       required this.taskTitle,
       required this.taskDescription,
       required this.onStateChanged,
-      required this.isChecked});
+      required this.isChecked,required this.onTaskDeleted});
 
   @override
   State<TaskContainer> createState() => _TaskContainerState();
@@ -217,7 +219,11 @@ class _TaskContainerState extends State<TaskContainer> {
                     ),
                   ),
                   IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        setState(() {
+                          widget.onTaskDeleted();
+                        });
+                      },
                       icon: Icon(Icons.delete, color: Colors.red))
                 ],
               ),

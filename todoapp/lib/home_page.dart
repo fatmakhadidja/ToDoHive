@@ -207,6 +207,13 @@ class _HomePageState extends State<HomePage> {
                               children: taskList
                                   .map((task) => TaskContainer(
                                         isChecked: task['isDone'] == 1,
+                                        onTaskDeleted: () {
+                                          setState(() {
+                                            sqlDB.deleteData(
+                                                "DELETE FROM tasks WHERE id = ${task['id']} ");
+                                            fetchTasks();
+                                          });
+                                        },
                                         taskTitle: task['name'] ?? 'No Title',
                                         taskDescription: task['description'] ??
                                             'No Description',
@@ -214,7 +221,7 @@ class _HomePageState extends State<HomePage> {
                                           setState(() {
                                             sqlDB.updateData(
                                                 "UPDATE tasks SET isDone = $newValue WHERE id = ${task['id']};");
-                                                fetchTasks();
+                                            fetchTasks();
                                           });
                                         },
                                       ))

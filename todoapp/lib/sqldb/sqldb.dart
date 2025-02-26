@@ -86,7 +86,8 @@ class SqlDB {
   // Method to delete data from the database
   deleteData(String sql) async {
     Database? mydb = await db; // Get database instance
-    int response = await mydb!.rawDelete(sql); // Execute DELETE query
+    int response = await mydb!.rawDelete(sql); 
+    print('task deleted ================================');// Execute DELETE query
     return response; // Return the number of affected rows
   }
 }
