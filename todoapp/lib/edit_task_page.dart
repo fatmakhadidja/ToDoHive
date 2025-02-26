@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
-
+import 'core/constants.dart';
 import 'package:todoapp/core/utils.dart';
 
 // ignore: must_be_immutable
 class EditTaskScreen extends StatefulWidget {
+  int? id;
   String? taskName;
   String? taskDescription;
-  String? category;
   DateTime? date;
+  int? taskCategory;
+  List<String> categories = ["Education", "Work", "Daily Tasks", "Groceries"];
   EditTaskScreen(
       {super.key,
       this.taskDescription,
       this.taskName,
-      this.category,
-      this.date});
+      this.date,
+      this.taskCategory,
+      this.id});
 
   @override
   State<EditTaskScreen> createState() => _EditTaskScreenState();
@@ -61,18 +64,28 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                   weight: FontWeight.w800,
                 ),
                 SizedBox(height: 10),
-                // TaskNameTextField(
-                //   taskName: widget.taskName,
-                // ),
+                TaskNameTextField(
+                  taskName: widget.taskName,
+                  onNameChanged: (newName) {
+                    setState(() {
+                      widget.taskName = newName;
+                    });
+                  },
+                ),
               ],
             ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // CategoriesRow(
-              //   selectedCategory: getGategory(widget.category),
-              // ),
+              CategoriesRow(
+                selectedCategory: widget.taskCategory,
+                onCategorySelected: (int newCategory) {
+                  setState(() {
+                    widget.taskCategory = newCategory;
+                  });
+                },
+              ),
             ],
           ),
           SizedBox(height: 18),
@@ -86,19 +99,33 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
           SizedBox(height: 18),
           Padding(
             padding: const EdgeInsets.all(15),
-            // child: TaskDescriptionTextField(
-            //   taskDescription: widget.taskDescription,
-            // ),
+            child: TaskDescriptionTextField(
+              taskDescription: widget.taskDescription,
+              onDescriptionChanged: (newDescription) {
+                setState(() {
+                  widget.taskDescription = newDescription;
+                });
+              },
+            ),
           ),
           SizedBox(height: 18),
-          EditTaskButton()
+          GestureDetector(
+              onTap: () {
+                String formattedDate =
+                    "${widget.date!.year.toString()}-${widget.date!.month.toString().padLeft(2, '0')}-${widget.date!.day.toString().padLeft(2, '0')}";
+                sqlDB.updateData(
+                    "UPDATE tasks SET name = '${widget.taskName}', description = '${widget.taskDescription}', category = '${widget.taskCategory}', date = '$formattedDate' WHERE id = ${widget.id}");
+
+                Navigator.pop(context, true);
+              },
+              child: EditTaskButton())
         ],
       ),
     ));
   }
 }
 
-int getGategory(String? category) {
+int getGategoryStr(String? category) {
   if (category == 'Education') return 0;
   if (category == 'Work') return 1;
   if (category == 'Daily Tasks') return 2;

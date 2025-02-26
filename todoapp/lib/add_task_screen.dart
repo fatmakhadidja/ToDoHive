@@ -107,9 +107,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
             SizedBox(height: 18),
             GestureDetector(
               onTap: () {
+                String formattedDate = "${selectedDate.year}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')}";
                 sqlDB.insertData(
-                    "INSERT INTO tasks (name, description, category, isDone, date) VALUES ('$taskName', '$taskDescription', '$taskCategory', 0, '$selectedDate')");
-
+                    "INSERT INTO tasks (name, description, category, isDone, date) VALUES ('$taskName', '$taskDescription', '$taskCategory', 0, '$formattedDate')");
                 Navigator.pop(context, true);
               },
               child: AddTaskButton(),

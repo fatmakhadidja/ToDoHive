@@ -22,13 +22,13 @@ class SqlDB {
   initialDB() async {
     String databasepath = await getDatabasesPath(); // Get default database path
     String path = join(
-        databasepath, 'todo.db'); // Set the database file name and location
+        databasepath, 'todoDB.db'); // Set the database file name and location
 
     // Open the database and execute onCreate or onUpgrade if needed
     Database db = await openDatabase(
       path,
       onCreate: _onCreate, // Called when database is created for the first time
-      version: 1, // Database version (used for upgrades)
+      version: 2, // Database version (used for upgrades)
       onUpgrade: _onUpgrade, // Called when database version is changed
     );
 
@@ -48,7 +48,7 @@ class SqlDB {
       "id" INTEGER PRIMARY KEY AUTOINCREMENT, 
       "name" TEXT NOT NULL, 
       "description" TEXT,
-      "category"  TEXT NOT NULL,
+      "category"  INTEGER NOT NULL,
       "isDone" INTEGER NOT NULL DEFAULT 0,
       "date" TEXT NOT NULL
     )
@@ -86,8 +86,9 @@ class SqlDB {
   // Method to delete data from the database
   deleteData(String sql) async {
     Database? mydb = await db; // Get database instance
-    int response = await mydb!.rawDelete(sql); 
-    print('task deleted ================================');// Execute DELETE query
+    int response = await mydb!.rawDelete(sql);
+    print(
+        'task deleted ================================'); // Execute DELETE query
     return response; // Return the number of affected rows
   }
 }

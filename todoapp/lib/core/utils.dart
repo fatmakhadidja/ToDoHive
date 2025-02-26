@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todoapp/edit_task_page.dart';
 import 'constants.dart';
+import 'package:todoapp/edit_task_page.dart';
 
 class MyText extends StatelessWidget {
   final FontWeight? weight;
@@ -109,18 +110,27 @@ class _TaskTypeContainerState extends State<TaskTypeContainer> {
 
 // ignore: must_be_immutable
 class TaskContainer extends StatefulWidget {
+  final int id;
   final String taskTitle;
   final String taskDescription;
+  final int category;
+  DateTime date;
   bool isChecked;
   final Function(int) onStateChanged;
-  final Function () onTaskDeleted;
+  final Function() onTaskDeleted;
+  final Function() onTaskUpdated;
 
   TaskContainer(
       {super.key,
       required this.taskTitle,
       required this.taskDescription,
       required this.onStateChanged,
-      required this.isChecked,required this.onTaskDeleted});
+      required this.isChecked,
+      required this.onTaskDeleted,
+      required this.category,
+      required this.date,
+      required this.id,
+      required this.onTaskUpdated});
 
   @override
   State<TaskContainer> createState() => _TaskContainerState();
@@ -154,13 +164,11 @@ class _TaskContainerState extends State<TaskContainer> {
                       value: widget.isChecked,
                       onChanged: (bool? value) {
                         setState(() {
-                          widget.isChecked = value == true
-                              ? true
-                              : false; 
+                          widget.isChecked = value == true ? true : false;
                         });
 
                         int newValue = widget.isChecked ? 1 : 0;
-                        widget.onStateChanged(newValue); 
+                        widget.onStateChanged(newValue);
                       }),
                   Padding(
                     padding: const EdgeInsets.all(10),
@@ -196,18 +204,7 @@ class _TaskContainerState extends State<TaskContainer> {
               Row(
                 children: [
                   IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => EditTaskScreen(
-                              taskName: 'task name',
-                              taskDescription: 'task description',
-                              category: 'Education',
-                              date: DateTime.now()),
-                        ),
-                      );
-                    },
+                    onPressed: () => widget.onTaskUpdated(),
                     icon: Icon(
                       Icons.edit,
                       color: WidgetStateColor.resolveWith((states) {
@@ -237,7 +234,7 @@ class _TaskContainerState extends State<TaskContainer> {
 
 // ignore: must_be_immutable
 class TaskNameTextField extends StatefulWidget {
-  final String taskName;
+  final String? taskName;
   final Function(String) onNameChanged;
 
   TaskNameTextField(
@@ -280,7 +277,7 @@ class _TaskNameTextFieldState extends State<TaskNameTextField> {
 
 // ignore: must_be_immutable
 class CategoriesRow extends StatefulWidget {
-  final int selectedCategory;
+  int? selectedCategory;
   final Function(int) onCategorySelected;
 
   CategoriesRow(
@@ -420,7 +417,7 @@ class _CalendarTextFieldState extends State<CalendarTextField> {
 
 // ignore: must_be_immutable
 class TaskDescriptionTextField extends StatefulWidget {
-  final String taskDescription;
+  final String? taskDescription;
   final Function(String) onDescriptionChanged;
 
   TaskDescriptionTextField(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todoapp/core/utils.dart';
 import 'package:todoapp/core/constants.dart';
+import 'edit_task_page.dart';
 import 'add_task_screen.dart';
 
 class HomePage extends StatefulWidget {
@@ -206,6 +207,29 @@ class _HomePageState extends State<HomePage> {
                           : Column(
                               children: taskList
                                   .map((task) => TaskContainer(
+                                        onTaskUpdated: () {
+                                          setState(() {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    EditTaskScreen(
+                                                        id: task['id'],
+                                                        taskName: task['name'],
+                                                        taskCategory:
+                                                            task['category'],
+                                                        taskDescription:
+                                                            task['description'],
+                                                        date: DateTime.parse(
+                                                            task['date'])),
+                                              ),
+                                            );
+                                          });
+                                        },
+                                        id: task['id'],
+                                        date: DateTime.parse(task[
+                                            'date']), // turn String to DateTime
+                                        category: task['category'],
                                         isChecked: task['isDone'] == 1,
                                         onTaskDeleted: () {
                                           setState(() {
