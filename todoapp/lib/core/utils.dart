@@ -203,7 +203,9 @@ class _TaskContainerState extends State<TaskContainer> {
               Row(
                 children: [
                   IconButton(
-                    onPressed: () => widget.onTaskUpdated(),
+                    onPressed: () {
+                      widget.onTaskUpdated();
+                    },
                     icon: Icon(
                       Icons.edit,
                       color: WidgetStateColor.resolveWith((states) {
@@ -494,7 +496,7 @@ class _EditTaskButtonState extends State<EditTaskButton> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: null,
       style: ButtonStyle(
           backgroundColor: WidgetStatePropertyAll(MyColors.mainPurple)),
       child: MyText(

@@ -37,7 +37,6 @@ class SqlDB {
 
   // Method called when the database version is upgraded
   _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    print("onUpgrade ===============================");
     // This is where you would handle schema migrations when updating the database
   }
 
@@ -53,15 +52,12 @@ class SqlDB {
       "date" TEXT NOT NULL
     )
     '''); // SQL query to create the 'tasks' table
-
-    print("Created tables ============================");
   }
 
   // Method to retrieve data using a raw SQL query
   getData(String sql) async {
     Database? mydb = await db;
-    print(
-        'db accesses ====================================='); // Get database instance
+    // Get database instance
     List<Map<String, dynamic>> response =
         await mydb!.rawQuery(sql); // Execute SELECT query
     return response; // Return fetched data as a list of maps
@@ -71,7 +67,6 @@ class SqlDB {
   insertData(String sql) async {
     Database? mydb = await db; // Get database instance
     int response = await mydb!.rawInsert(sql);
-    print("Inserted data $response ============================");
     // Execute INSERT query
     return response; // Return the row ID of the inserted record
   }
@@ -87,8 +82,7 @@ class SqlDB {
   deleteData(String sql) async {
     Database? mydb = await db; // Get database instance
     int response = await mydb!.rawDelete(sql);
-    print(
-        'task deleted ================================'); // Execute DELETE query
+    // Execute DELETE query
     return response; // Return the number of affected rows
   }
 }

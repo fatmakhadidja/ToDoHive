@@ -45,7 +45,9 @@ class _HomePageState extends State<HomePage> {
       ),
     );
     if (result == true) {
-      fetchTasks();
+      setState(() {
+        fetchTasks();
+      });
     }
   }
 
@@ -64,7 +66,6 @@ class _HomePageState extends State<HomePage> {
         isLoading = false;
       });
     } catch (e) {
-      print("Error fetching tasks: $e");
       setState(() {
         isLoading = false;
       });
@@ -225,7 +226,9 @@ class _HomePageState extends State<HomePage> {
                           : Column(
                               children: taskList
                                   .map((task) => TaskContainer(
-                                        onTaskUpdated: () => navigateToEditTaskScreen(task),
+                                        onTaskUpdated: () {
+                                          navigateToEditTaskScreen(task);
+                                        },
                                         id: task['id'],
                                         date: DateTime.parse(task[
                                             'date']), // turn String to DateTime
