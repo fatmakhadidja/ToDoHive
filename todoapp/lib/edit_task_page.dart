@@ -115,7 +115,6 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                     "${widget.date!.year.toString()}-${widget.date!.month.toString().padLeft(2, '0')}-${widget.date!.day.toString().padLeft(2, '0')}";
                 sqlDB.updateData(
                     "UPDATE tasks SET name = '${widget.taskName}', description = '${widget.taskDescription}', category = '${widget.taskCategory}', date = '$formattedDate' WHERE id = ${widget.id}");
-
                 Navigator.pop(context, true);
               },
               child: EditTaskButton())

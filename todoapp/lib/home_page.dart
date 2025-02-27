@@ -31,6 +31,24 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  void navigateToEditTaskScreen(Map<String, dynamic> task) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditTaskScreen(
+          id: task['id'],
+          taskName: task['name'],
+          taskCategory: task['category'],
+          taskDescription: task['description'],
+          date: DateTime.parse(task['date']),
+        ),
+      ),
+    );
+    if (result == true) {
+      fetchTasks();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -207,25 +225,7 @@ class _HomePageState extends State<HomePage> {
                           : Column(
                               children: taskList
                                   .map((task) => TaskContainer(
-                                        onTaskUpdated: () {
-                                          setState(() {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    EditTaskScreen(
-                                                        id: task['id'],
-                                                        taskName: task['name'],
-                                                        taskCategory:
-                                                            task['category'],
-                                                        taskDescription:
-                                                            task['description'],
-                                                        date: DateTime.parse(
-                                                            task['date'])),
-                                              ),
-                                            );
-                                          });
-                                        },
+                                        onTaskUpdated: () => navigateToEditTaskScreen(task),
                                         id: task['id'],
                                         date: DateTime.parse(task[
                                             'date']), // turn String to DateTime

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todoapp/edit_task_page.dart';
+
 import 'constants.dart';
-import 'package:todoapp/edit_task_page.dart';
 
 class MyText extends StatelessWidget {
   final FontWeight? weight;
@@ -237,7 +236,7 @@ class TaskNameTextField extends StatefulWidget {
   final String? taskName;
   final Function(String) onNameChanged;
 
-  TaskNameTextField(
+  const TaskNameTextField(
       {super.key, required this.taskName, required this.onNameChanged});
 
   @override
@@ -420,7 +419,7 @@ class TaskDescriptionTextField extends StatefulWidget {
   final String? taskDescription;
   final Function(String) onDescriptionChanged;
 
-  TaskDescriptionTextField(
+  const TaskDescriptionTextField(
       {super.key,
       required this.taskDescription,
       required this.onDescriptionChanged});
