@@ -18,8 +18,11 @@ class MyText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      textAlign: TextAlign.center,
+      textAlign: TextAlign.start,
       style: TextStyle(color: color, fontSize: size, fontWeight: weight),
+      maxLines: null,
+      overflow: TextOverflow.visible,
+      softWrap: true,
     );
   }
 }
@@ -119,17 +122,18 @@ class TaskContainer extends StatefulWidget {
   final Function() onTaskDeleted;
   final Function() onTaskUpdated;
 
-  TaskContainer(
-      {super.key,
-      required this.taskTitle,
-      required this.taskDescription,
-      required this.onStateChanged,
-      required this.isChecked,
-      required this.onTaskDeleted,
-      required this.category,
-      required this.date,
-      required this.id,
-      required this.onTaskUpdated});
+  TaskContainer({
+    super.key,
+    required this.taskTitle,
+    required this.taskDescription,
+    required this.onStateChanged,
+    required this.isChecked,
+    required this.onTaskDeleted,
+    required this.category,
+    required this.date,
+    required this.id,
+    required this.onTaskUpdated,
+  });
 
   @override
   State<TaskContainer> createState() => _TaskContainerState();
@@ -140,93 +144,73 @@ class _TaskContainerState extends State<TaskContainer> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: IntrinsicHeight(
-        child: Container(
-          width: MediaQuery.of(context).size.width * 0.95,
-          padding: EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            color: WidgetStateColor.resolveWith((states) {
-              if (widget.isChecked) {
-                return const Color.fromARGB(255, 157, 211, 158);
-              }
-              return const Color.fromARGB(255, 231, 231, 231);
-            }),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Checkbox(
-                      activeColor: Color.fromARGB(255, 231, 231, 231),
-                      value: widget.isChecked,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          widget.isChecked = value == true ? true : false;
-                        });
-
-                        int newValue = widget.isChecked ? 1 : 0;
-                        widget.onStateChanged(newValue);
-                      }),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.95,
+        padding: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color: widget.isChecked
+              ? const Color.fromARGB(255, 157, 211, 158)
+              : const Color.fromARGB(255, 231, 231, 231),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Checkbox(
+                  activeColor: Color.fromARGB(255, 231, 231, 231),
+                  value: widget.isChecked,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      widget.isChecked = value ?? false;
+                    });
+                    widget.onStateChanged(widget.isChecked ? 1 : 0);
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width *
+                        0.4, // 60% of row width
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         MyText(
-                            color: WidgetStateColor.resolveWith((states) {
-                              if (widget.isChecked) {
-                                return Colors.white;
-                              }
-                              return Colors.black;
-                            }),
-                            size: 17,
-                            text: widget.taskTitle,
-                            weight: FontWeight.w900),
+                          color: widget.isChecked ? Colors.white : Colors.black,
+                          size: 17,
+                          text: widget.taskTitle,
+                          weight: FontWeight.w900,
+                        ),
                         SizedBox(height: 5),
                         MyText(
-                            color: WidgetStateColor.resolveWith((states) {
-                              if (widget.isChecked) {
-                                return Colors.white;
-                              }
-                              return Colors.black;
-                            }),
-                            size: 11,
-                            text: widget.taskDescription,
-                            weight: FontWeight.w500),
+                          color: widget.isChecked ? Colors.white : Colors.black,
+                          size: 11,
+                          text: widget.taskDescription,
+                          weight: FontWeight.w500,
+                        ),
                       ],
                     ),
                   ),
-                ],
-              ),
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      widget.onTaskUpdated();
-                    },
-                    icon: Icon(
-                      Icons.edit,
-                      color: WidgetStateColor.resolveWith((states) {
-                        if (widget.isChecked) {
-                          return Colors.white;
-                        }
-                        return Color(0xff757575);
-                      }),
-                    ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                IconButton(
+                  onPressed: widget.onTaskUpdated,
+                  icon: Icon(
+                    Icons.edit,
+                    color: widget.isChecked ? Colors.white : Color(0xff757575),
                   ),
-                  IconButton(
-                      onPressed: () {
-                        setState(() {
-                          widget.onTaskDeleted();
-                        });
-                      },
-                      icon: Icon(Icons.delete, color: Colors.red))
-                ],
-              ),
-            ],
-          ),
+                ),
+                IconButton(
+                  onPressed: widget.onTaskDeleted,
+                  icon: Icon(Icons.delete, color: Colors.red),
+                )
+              ],
+            ),
+          ],
         ),
       ),
     );

@@ -1,0 +1,2 @@
+D:/Desktop/ESI stuff/1CS/TodoApp/todoapp/android/app/.cxx/RelWithDebInfo/2q1l635d/x86/CMakeFiles/edit_cache.dir
+D:/Desktop/ESI stuff/1CS/TodoApp/todoapp/android/app/.cxx/RelWithDebInfo/2q1l635d/x86/CMakeFiles/rebuild_cache.dir
