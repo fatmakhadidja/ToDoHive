@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
 
     if (result == true) {
       setState(() {
-        fetchTasks(category, date);
+        fetchTasks();
       }); // Triggers rebuild when returning
     }
   }
@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
     );
     if (result == true) {
       setState(() {
-        fetchTasks(category, date);
+        fetchTasks();
       });
     }
   }
@@ -57,13 +57,14 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    fetchTasks(category, date); // Fetch tasks when the screen loads
+
+    fetchTasks();
   }
 
-  Future<void> fetchTasks(int category, String date) async {
+  Future<void> fetchTasks() async {
     try {
       List<Map<String, dynamic>> tasks = await sqlDB.getData(
-          "SELECT * FROM 'tasks' WHERE category = $category AND date = $date ;");
+          "SELECT * FROM tasks WHERE category = $category AND date ='$date' ;");
       setState(() {
         taskList = tasks;
         isLoading = false;
@@ -81,7 +82,7 @@ class _HomePageState extends State<HomePage> {
         pressedTasks[i] = (i == index);
       }
       category = index;
-      fetchTasks(category, date);
+      fetchTasks();
     });
   }
 
@@ -106,6 +107,9 @@ class _HomePageState extends State<HomePage> {
     if (pickedDate != null && pickedDate != selectedDate) {
       setState(() {
         selectedDate = pickedDate;
+        date =
+            "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
+        fetchTasks();
       });
     }
   }
@@ -243,7 +247,7 @@ class _HomePageState extends State<HomePage> {
                                           setState(() {
                                             sqlDB.deleteData(
                                                 "DELETE FROM tasks WHERE id = ${task['id']} ");
-                                            fetchTasks(category, date);
+                                            fetchTasks();
                                           });
                                         },
                                         taskTitle: task['name'] ?? 'No Title',
@@ -253,7 +257,7 @@ class _HomePageState extends State<HomePage> {
                                           setState(() {
                                             sqlDB.updateData(
                                                 "UPDATE tasks SET isDone = $newValue WHERE id = ${task['id']};");
-                                            fetchTasks(category, date);
+                                            fetchTasks();
                                           });
                                         },
                                       ))
