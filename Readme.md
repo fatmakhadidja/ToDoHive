@@ -22,7 +22,7 @@ It helps users efficiently **add, edit, and delete tasks** while categorizing th
 - 📱 **Responsive design** for different screen sizes.  
 
 ## Screenshots of the app :
-![image](https://github.com/user-attachments/assets/0279d0b6-eae8-4f35-98f5-cbb9ccc2a7cf)
+![image](https://github.com/user-attachments/assets/63b863c4-91f9-49d7-9a93-ecaf3c535527)
 ![image](https://github.com/user-attachments/assets/69213ded-d7f0-4df4-a769-8585d955cd71)
 ![image](https://github.com/user-attachments/assets/8bf364cb-3e6d-4049-bb31-13ca6f0a67b3)
 ![image](https://github.com/user-attachments/assets/1a15659b-1699-4f0b-8134-4944593b9c30)
