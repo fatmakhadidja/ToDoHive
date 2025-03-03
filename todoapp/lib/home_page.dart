@@ -18,10 +18,10 @@ class _HomePageState extends State<HomePage> {
   bool isLoading = true; // To track loading state
   int indicator = 0;
   int category = 0;
-  late int workTasks;
-  late int educationTasks;
-  late int dailyTasks;
-  late int groceriesTasks;
+  int workTasks = 0;
+  int educationTasks = 0;
+  int dailyTasks = 0;
+  int groceriesTasks = 0;
 
   String date =
       "${DateTime.now().year}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}";
@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
     try {
       List<Map<String, dynamic>> tasks = await sqlDB.getData(
           "SELECT * FROM tasks WHERE category = $category AND date ='$date';");
-          
+
       educationTasks = await sqlDB.countTasks("tasks", 0, date);
       workTasks = await sqlDB.countTasks("tasks", 1, date);
       dailyTasks = await sqlDB.countTasks("tasks", 2, date);
@@ -240,13 +240,22 @@ class _HomePageState extends State<HomePage> {
                           ? Padding(
                               padding: const EdgeInsets.all(15),
                               child: Center(
-                                child: MyText(
-                                  size: 18,
-                                  text: 'You Have No Tasks Today',
-                                  color: Colors.black,
-                                  weight: FontWeight.w500,
+                                  child: SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.5,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.4,
+                                child: Column(
+                                  children: [
+                                    Image.asset(
+                                        'assets/images/illustrationNoTasks.png'),
+                                    SizedBox(height: 10),
+                                    MyText(
+                                        size: 13,
+                                        text: 'No Tasks left ..',
+                                        color: Colors.grey)
+                                  ],
                                 ),
-                              ),
+                              )),
                             )
                           : Column(
                               children: taskList

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todoapp/core/constants.dart';
 import 'dart:async';
 import 'package:todoapp/core/utils.dart';
 import 'home_page.dart';
@@ -46,10 +47,17 @@ class _SplashScreenState extends State<SplashScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image(image: AssetImage('assets/images/logo.png')),
+                      SizedBox(
+                          width: 45,
+                          height: 45,
+                          child: Image(
+                              image: AssetImage('assets/images/logo.png'))),
                       SizedBox(width: 10),
                       MyText(
-                          text: 'TodoHive', size: 41, weight: FontWeight.w900,color:Colors.black)
+                          text: 'TodoHive',
+                          size: 41,
+                          weight: FontWeight.w900,
+                          color: Colors.black)
                     ],
                   ),
                   SizedBox(height: 10),
@@ -58,14 +66,18 @@ class _SplashScreenState extends State<SplashScreen> {
                     children: [
                       MyText(
                           size: 13,
-                          color:Colors.black,
+                          color: Colors.black,
                           text: 'Innovative, user-friendly,\n'
                               'and easy.')
                     ],
                   ),
                   SizedBox(height: 10),
-                  CircularProgressIndicator(
-                    color: Colors.black,
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width*0.5,
+                    child: LinearProgressIndicator(
+                      
+                      color: Colors.black,
+                    ),
                   )
                 ],
               ),
