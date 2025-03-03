@@ -1,6 +1,6 @@
 # 📝 ToDoHive
 
-- ToDoHive is a **simple and intuitive to-do list application** built with Flutter for UI and sqlite for local data storage.   
+- ToDoHive is a **simple and intuitive to-do list application** built with Flutter for UI and sqlite for local data storage. ( still under development ).    
 
 - ToDoHive UI design :    
    https://www.figma.com/design/7GcokpEQtgPBRRySdLKBR4/Todo-App-(Community)?node-id=95-174&t=JggXaKrOPxrJ7iNi-0
