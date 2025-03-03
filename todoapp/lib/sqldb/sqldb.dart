@@ -60,23 +60,29 @@ class SqlDB {
     // Get database instance
     List<Map<String, dynamic>> response =
         await mydb!.rawQuery(sql); // Execute SELECT query
+
     return response; // Return fetched data as a list of maps
   }
 
   // Method to insert data into the database
-  insertData(String sql) async {
-    Database? mydb = await db; // Get database instance
-    int response = await mydb!.rawInsert(sql);
-    // Execute INSERT query
-    return response; // Return the row ID of the inserted record
+  Future<int> insertData(String table, Map<String, dynamic> data) async {
+    Database? mydb = await db;
+    return await mydb!
+        .insert(table, data, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   // Method to update existing data in the database
-  updateData(String sql) async {
-    Database? mydb = await db; // Get database instance
-    int response = await mydb!.rawUpdate(sql); // Execute UPDATE query
-    return response; // Return the number of affected rows
-  }
+ Future<int> updateData(String table, Map<String, dynamic> data, String whereClause, List<dynamic> whereArgs) async {
+  Database? mydb = await db;
+  return await mydb!.update(
+    table,
+    data,
+    where: whereClause,
+    whereArgs: whereArgs,
+    conflictAlgorithm: ConflictAlgorithm.replace, // Prevents conflicts
+  );
+}
+
 
   // Method to delete data from the database
   deleteData(String sql) async {

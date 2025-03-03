@@ -256,7 +256,14 @@ class _HomePageState extends State<HomePage> {
                                         onStateChanged: (newValue) {
                                           setState(() {
                                             sqlDB.updateData(
-                                                "UPDATE tasks SET isDone = $newValue WHERE id = ${task['id']};");
+                                              "tasks",
+                                              {"isDone": newValue},
+                                              "id = ?",
+                                              [
+                                                task['id']
+                                              ], // Pass the task ID to specify which row to update
+                                            );
+
                                             fetchTasks();
                                           });
                                         },

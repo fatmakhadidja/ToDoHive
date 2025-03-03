@@ -114,7 +114,19 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                 String formattedDate =
                     "${widget.date!.year.toString()}-${widget.date!.month.toString().padLeft(2, '0')}-${widget.date!.day.toString().padLeft(2, '0')}";
                 await sqlDB.updateData(
-                    "UPDATE tasks SET name = '${widget.taskName}', description = '${widget.taskDescription}', category = '${widget.taskCategory}', date = '$formattedDate' WHERE id = ${widget.id}");
+                  "tasks",
+                  {
+                    "name": widget.taskName,
+                    "description": widget.taskDescription,
+                    "category": widget.taskCategory,
+                    "isDone": 0,
+                    "date": formattedDate,
+                  },
+                  "id = ?",
+                  [
+                    widget.id
+                  ], // Pass the task ID to specify which row to update
+                );
 
                 Navigator.pop(context, true);
               },
