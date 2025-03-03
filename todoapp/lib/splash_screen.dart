@@ -15,7 +15,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 2), () {
+    Timer(Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => HomePage()), // Your main screen
@@ -73,9 +73,8 @@ class _SplashScreenState extends State<SplashScreen> {
                   ),
                   SizedBox(height: 10),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width*0.5,
+                    width: MediaQuery.of(context).size.width * 0.5,
                     child: LinearProgressIndicator(
-                      
                       color: Colors.black,
                     ),
                   )
