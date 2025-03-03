@@ -1,4 +1,4 @@
-# 📝 Task Manager App
+# 📝 ToDoHive
 
 ToDoHive is a **simple and intuitive to-do list application** built with Flutter for UI and sqflite for local data storage.
 It helps users efficiently **add, edit, and delete tasks** while categorizing them into four predefined groups:
