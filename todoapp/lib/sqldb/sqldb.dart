@@ -72,17 +72,17 @@ class SqlDB {
   }
 
   // Method to update existing data in the database
- Future<int> updateData(String table, Map<String, dynamic> data, String whereClause, List<dynamic> whereArgs) async {
-  Database? mydb = await db;
-  return await mydb!.update(
-    table,
-    data,
-    where: whereClause,
-    whereArgs: whereArgs,
-    conflictAlgorithm: ConflictAlgorithm.replace, // Prevents conflicts
-  );
-}
-
+  Future<int> updateData(String table, Map<String, dynamic> data,
+      String whereClause, List<dynamic> whereArgs) async {
+    Database? mydb = await db;
+    return await mydb!.update(
+      table,
+      data,
+      where: whereClause,
+      whereArgs: whereArgs,
+      conflictAlgorithm: ConflictAlgorithm.replace, // Prevents conflicts
+    );
+  }
 
   // Method to delete data from the database
   deleteData(String sql) async {
@@ -90,5 +90,16 @@ class SqlDB {
     int response = await mydb!.rawDelete(sql);
     // Execute DELETE query
     return response; // Return the number of affected rows
+  }
+
+  Future<int> countTasks(String table, int category, String date) async {
+    Database? mydb = await db; // Ensure database is open
+
+    List<Map<String, dynamic>> result = await mydb!.rawQuery(
+      'SELECT COUNT(*) as count FROM $table WHERE category = ? AND date = ?',
+      [category, date], // Pass parameters safely
+    );
+
+    return result.isNotEmpty ? result.first['count'] as int : 0;
   }
 }

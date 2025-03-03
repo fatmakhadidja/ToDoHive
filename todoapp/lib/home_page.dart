@@ -18,6 +18,11 @@ class _HomePageState extends State<HomePage> {
   bool isLoading = true; // To track loading state
   int indicator = 0;
   int category = 0;
+  late int workTasks;
+  late int educationTasks;
+  late int dailyTasks;
+  late int groceriesTasks;
+
   String date =
       "${DateTime.now().year}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}";
 
@@ -64,12 +69,23 @@ class _HomePageState extends State<HomePage> {
   Future<void> fetchTasks() async {
     try {
       List<Map<String, dynamic>> tasks = await sqlDB.getData(
-          "SELECT * FROM tasks WHERE category = $category AND date ='$date' ;");
+          "SELECT * FROM tasks WHERE category = $category AND date ='$date';");
+          
+      educationTasks = await sqlDB.countTasks("tasks", 0, date);
+      workTasks = await sqlDB.countTasks("tasks", 1, date);
+      dailyTasks = await sqlDB.countTasks("tasks", 2, date);
+      groceriesTasks = await sqlDB.countTasks("tasks", 3, date);
+
       setState(() {
         taskList = tasks;
         isLoading = false;
+        workTasks = workTasks;
+        educationTasks = educationTasks;
+        dailyTasks = dailyTasks;
+        groceriesTasks = groceriesTasks;
       });
     } catch (e) {
+      print("Error fetching tasks: $e");
       setState(() {
         isLoading = false;
       });
@@ -172,7 +188,7 @@ class _HomePageState extends State<HomePage> {
                               color: MyColors.blue,
                               imageIcon: 'assets/images/ProjectIcon.png',
                               taskType: 'Education',
-                              taskNumber: 10,
+                              taskNumber: educationTasks,
                               pressedTasks: pressedTasks,
                               index: 0,
                               onTap: updateTaskSelection,
@@ -181,7 +197,7 @@ class _HomePageState extends State<HomePage> {
                               color: MyColors.green,
                               imageIcon: 'assets/images/WorkIcon.png',
                               taskType: 'Work',
-                              taskNumber: 5,
+                              taskNumber: workTasks,
                               pressedTasks: pressedTasks,
                               index: 1,
                               onTap: updateTaskSelection,
@@ -196,7 +212,7 @@ class _HomePageState extends State<HomePage> {
                               color: MyColors.mainPurple,
                               imageIcon: 'assets/images/DailyTasksIcon.png',
                               taskType: 'Daily Tasks',
-                              taskNumber: 2,
+                              taskNumber: dailyTasks,
                               pressedTasks: pressedTasks,
                               index: 2,
                               onTap: updateTaskSelection,
@@ -205,7 +221,7 @@ class _HomePageState extends State<HomePage> {
                               color: MyColors.brown,
                               imageIcon: 'assets/images/GroceriesIcon.png',
                               taskType: 'Groceries',
-                              taskNumber: 4,
+                              taskNumber: groceriesTasks,
                               pressedTasks: pressedTasks,
                               index: 3,
                               onTap: updateTaskSelection,
