@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:todoapp/add_task_screen.dart';
-import 'package:todoapp/edit_task_page.dart';
-import 'package:todoapp/splash_screen.dart';
+import 'package:todoapp/screens/add_task_screen.dart';
+import 'package:todoapp/screens/edit_task_page.dart';
+import 'package:todoapp/screens/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());

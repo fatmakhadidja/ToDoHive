@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todoapp/core/utils.dart';
-import 'sqldb/sqldb.dart';
+import '../sqldb/sqldb.dart';
 
 class AddTaskScreen extends StatefulWidget {
   const AddTaskScreen({super.key});

@@ -245,10 +245,8 @@ class _HomePageState extends State<HomePage> {
                                 height:
                                     MediaQuery.of(context).size.height * 0.4,
                                 child: Column(
-                                  children: [
-                                    Image.asset(
-                                        'assets/images/illustrationNoTasks.png'),
-                                    SizedBox(height: 10),
+                                  children: [    
+                                    SizedBox(height: 30),
                                     MyText(
                                         size: 13,
                                         text: 'No Tasks left ..',

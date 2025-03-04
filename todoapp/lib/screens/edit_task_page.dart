@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'core/constants.dart';
+import '../core/constants.dart';
 import 'package:todoapp/core/utils.dart';
 
 // ignore: must_be_immutable
