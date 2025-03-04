@@ -14,7 +14,7 @@ It helps users efficiently **add, edit, and delete tasks** while categorizing th
 - **📅 Daily Tasks**
 - **🛒 Groceries**
 
-## ✨ Features
+##  Features
 - ✅ **Create, update, and delete tasks** seamlessly.  
 - 🏷 **Categorize tasks** for better organization.  
 - 📆 **Select a date** using a built-in calendar.  
