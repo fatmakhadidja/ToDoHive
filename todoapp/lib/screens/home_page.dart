@@ -59,6 +59,39 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future<void> _showDeleteConfirmationDialog(
+      BuildContext context, Map<String, dynamic> task) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Confirm Deletion"),
+          content: Text("Are you sure you want to delete this task?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  sqlDB.deleteData(
+                      "DELETE FROM tasks WHERE id = ${task['id']} ");
+                  fetchTasks();
+                });
+
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text("Delete", style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -245,7 +278,7 @@ class _HomePageState extends State<HomePage> {
                                 height:
                                     MediaQuery.of(context).size.height * 0.4,
                                 child: Column(
-                                  children: [    
+                                  children: [
                                     SizedBox(height: 30),
                                     MyText(
                                         size: 13,
@@ -267,11 +300,7 @@ class _HomePageState extends State<HomePage> {
                                         category: task['category'],
                                         isChecked: task['isDone'] == 1,
                                         onTaskDeleted: () {
-                                          setState(() {
-                                            sqlDB.deleteData(
-                                                "DELETE FROM tasks WHERE id = ${task['id']} ");
-                                            fetchTasks();
-                                          });
+                                          _showDeleteConfirmationDialog(context,task);
                                         },
                                         taskTitle: task['name'] ?? 'No Title',
                                         taskDescription: task['description'] ??
